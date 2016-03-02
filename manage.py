@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from config import app
+from app import create_app
 from flask_script import Manager
 
-manage = Manager(app)
 
-class hehe:
-    pass
+app = create_app('default')
+manager = Manager(app)
+
 
 if __name__=='__main__':
-    manage.run()
+    manager.run()
