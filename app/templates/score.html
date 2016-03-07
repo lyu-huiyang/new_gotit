@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}综合成绩查询{% endblock %}
+
+{% block page_content %}
+
+<table class="table table-bordered">
+    <h3>学生基本信息</h3>
+    <tr>
+        <td class="success">学号</td>
+        <td class="success">姓名</td>
+        <td class="success">性别</td>
+        <td class="success">年级</td>
+        <td class="success">院系</td>
+        <td class="success">专业</td>
+        <td class="success">班级</td>
+        <td class="success">科类</td>
+        <td class="success">层次</td>
+        <td class="success">学制</td>
+        <td class="success">师范</td>
+        <td class="success">外语</td>
+        <td class="success">备注</td>
+    </tr>
+    <tr>
+        <td class="info">{{ return_data[0]['number'] }}</td>
+        <td class="info">{{ return_data[0]['name'] }}</td>
+        <td class="info">{{ return_data[0]['sex'] }}</td>
+        <td class="info">{{ return_data[0]['year'] }}</td>
+        <td class="info">{{ return_data[0]['school'] }}</td>
+        <td class="info">{{ return_data[0]['major'] }}</td>
+        <td class="info">{{ return_data[0]['the_class'] }}</td>
+        <td class="info">{{ return_data[0]['kind'] }}</td>
+        <td class="info">{{ return_data[0]['level'] }}</td>
+        <td class="info">{{ return_data[0]['length'] }}</td>
+        <td class="info">{{ return_data[0]['normal'] }}</td>
+        <td class="info">{{ return_data[0]['language'] }}</td>
+        <td class="info">{{ return_data[0]['note'] }}</td>
+    </tr>
+
+
+</table>
+
+<table class="table table-bordered">
+    <h3>成绩信息</h3>
+    <tr>
+        <td class="success">序号</td>
+        <td class="success">学年</td>
+        <td class="success">学期</td>
+        <td class="success">类别</td>
+        <td class="success">课程编号</td>
+        <td class="success">课程名称</td>
+        <td class="success">学时</td>
+        <td class="success">学分</td>
+        <td class="success">考核方式</td>
+        <td class="success">原考成绩</td>
+        <td class="success">重学/补考成绩</td>
+        <td class="success">课程绩点</td>
+        <td class="success">学分绩点</td>
+        <td class="success">教师</td>
+    </tr>
+
+    {% for score in return_data[1] %}
+    <tr>
+        <td class="info">{{ score['number'] }}</td>
+        <td class="info">{{ score['learn_year'] }}</td>
+        <td class="info">{{ score['term'] }}</td>
+        <td class="info">{{ score['class_kind'] }}</td>
+        <td class="info">{{ score['class_number'] }}</td>
+        <td class="info">{{ score['class_name'] }}</td>
+        <td class="info">{{ score['learn_time'] }}</td>
+        <td class="info">{{ score['credit'] }}</td>
+        <td class="info">{{ score['exam_way'] }}</td>
+        <td class="info">{{ score['first_point'] }}</td>
+        <td class="info">{{ score['second_point'] }}</td>
+        <td class="info">{{ score['grade_point'] }}</td>
+        <td class="info">{{ score['credit_point'] }}</td>
+        <td class="info">{{ score['teacher'] }}</td>
+    </tr>
+    {% endfor %}
+
+
+</table>
+
+{% endblock %}

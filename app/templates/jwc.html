@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}教务处查询{% endblock %}
+
+{% block page_header %}
+<div class="page-header">
+    <h1>教务处成绩查询</h1>
+</div>
+{% endblock %}
+
+
+{% block page_content %}
+
+<h3>学生基本信息</h3>
+<table class="table table-bordered">
+    <tr>
+        <td class="success">{{stu_base_info['stu_id']}}</td>
+        <td class="success">{{stu_base_info['stu_name']}}</td>
+        <td class="success">{{stu_base_info['stu_school']}}</td>
+    </tr>
+    <tr>
+        <td class="info">{{stu_base_info['stu_major']}}</td>
+        <td class="info">{{stu_base_info['stu_major_direction']}}</td>
+        <td class="info">{{stu_base_info['stu_class']}}</td>
+    </tr>
+
+</table>
+<h3>至今未通过课程成绩：</h3>
+<table class="table table-bordered">
+    <tr>
+        <td class="success">课程代码</td>
+        <td class="success">课程名称</td>
+        <td class="success">课程性质</td>
+        <td class="success">学分</td>
+        <td class="success">最高成绩</td>
+        <td class="success">课程归属</td>
+    </tr>
+    {% for a_class in class_info %}
+    <tr>
+        <td class="info">{{ a_class['number'] }}</td>
+        <td class="info">{{ a_class['class_name'] }}</td>
+        <td class="info">{{ a_class['class_property'] }}</td>
+        <td class="info">{{ a_class['grade_point'] }}</td>
+        <td class="info">{{ a_class['max_point'] }}</td>
+        <td class="info">{{ a_class['class_return'] }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+
+<h3>每一学期成绩：</h3>
+<table class="table table-bordered">
+
+
+    {% for xq in score_content %}
+
+        <tr>
+            <td class="success">学年</td>
+            <td class="success">学期</td>
+            <td class="success">课程代码</td>
+            <td class="success">课程名称</td>
+            <td class="success">课程性质</td>
+            <td class="success">课程归属</td>
+            <td class="success">学分</td>
+            <td class="success">绩点</td>
+            <td class="success">成绩</td>
+            <td class="success">辅修标记</td>
+            <td class="success">补考成绩</td>
+            <td class="success">重修成绩</td>
+            <td class="success">开课学院</td>
+            <td class="success">备注</td>
+            <td class="success">重修标记</td>
+
+        </tr>
+        {% for a_class in xq %}
+        <tr>
+            <td class="info">{{ a_class['year'] }}</td>
+            <td class="info">{{ a_class['term'] }}</td>
+            <td class="info">{{ a_class['class_code'] }}</td>
+            <td class="info">{{ a_class['class_name'] }}</td>
+            <td class="info">{{ a_class['class_quality'] }}</td>
+            <td class="info">{{ a_class['class_return'] }}</td>
+            <td class="info">{{ a_class['score_point'] }}</td>
+            <td class="info">{{ a_class['gpa'] }}</td>
+            <td class="info">{{ a_class['point'] }}</td>
+            <td class="info">{{ a_class['flag'] }}</td>
+            <td class="info">{{ a_class['second_point'] }}</td>
+            <td class="info">{{ a_class['third_point'] }}</td>
+            <td class="info">{{ a_class['school'] }}</td>
+            <td class="info">{{ a_class['comment'] }}</td>
+            <td class="info">{{ a_class['second_flag'] }}</td>
+
+        </tr>
+        {% endfor %}
+    {% endfor %}
+</table>
+{% endblock %}
