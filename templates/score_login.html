@@ -1,0 +1,14 @@
+﻿{% extends "layout.html" %}
+
+{% block page_content %}
+
+<form method="post" class="form-signin">
+    <h2 class="form-signin-heading">图书馆借阅查询</h2>
+    {{ form.hidden_tag() }}
+    {{ form.post_xuehao.label }} {{ form.post_xuehao( class="form-control",placeholder="学号") }}
+    <br/>
+    {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+
+</form>
+
+{% endblock %}
