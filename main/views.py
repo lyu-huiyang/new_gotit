@@ -4,7 +4,7 @@ Routes and views for the flask application.
 """
 
 from datetime import datetime
-from flask import render_template, flash, request
+from flask import render_template, flash, request, redirect, url_for
 from forms import *
 from config import app
 from spider.library import *
@@ -96,12 +96,25 @@ def library():
     if form.is_submitted():
         number = form.number.data
         passwd = form.passwd.data
+        global library_number, library_password
+        library_number = number
+        library_password = passwd
         if check_login(number, passwd).url == 'http://222.206.65.12/reader/book_lst.php':
             books = library_login(number, passwd)
             return render_template('library.html', books=books)
         else:
             flash(u'帐号或密码错误')
     return render_template('library_login.html', form=form)
+
+
+# 图书馆借阅历史查询
+@app.route('/library_history', methods=['GET', 'POST'])
+def book_history():
+    if library_number=='':
+        return redirect(url_for('library'))
+    else:
+        books = library_history(library_number, library_password)
+        return render_template('book_history.html', books=books)
 
 
 @app.route('/cet', methods=['GET', 'POST'])
@@ -122,6 +135,7 @@ def cet():
 @app.route('/cet_no_number', methods=['GET', 'POST'])
 def cet_no_number():
     return render_template('cet_no_number_login.html')
+
 
 # 教务处成绩查询
 @app.route('/jwc', methods=['GET', 'POST'])
@@ -276,7 +290,7 @@ def jwc():
                                    score_content=score_content)
 
         except Exception:
-            return render_template("jwc_error.html",message=u"帐号或密码错误")
+            return render_template("jwc_error.html", message=u"帐号或密码错误")
 
     else:
         login_url = 'http://210.44.176.46/'

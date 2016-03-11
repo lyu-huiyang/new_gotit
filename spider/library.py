@@ -45,7 +45,49 @@ def library_login(number, passwd):
     return books
 
 
+def library_history(number, passwd):
+    login_url = 'http://222.206.65.12/reader/redr_verify.php'
+    book_hist_url = 'http://222.206.65.12/reader/book_hist.php'
+    data = {
+        'number': number,
+        'passwd': passwd,
+        'returnUrl': '',
+        'select': 'cert_no'
+    }
+    url_session = Session()
+
+    temp = url_session.post(login_url, data=data)
+    hist_data = {
+        'para_string': 'all',
+        'topage': '1'
+    }
+    book_hist = url_session.post(book_hist_url, data=hist_data)
+    page_content = book_hist.content
+    soup = BeautifulSoup(page_content, 'html5lib')
+    html_td = soup.find_all('td', bgcolor="#FFFFFF")
+    print len(html_td)
+    j = 0
+    books = []
+    abook = {}
+    print html_td[13].get_text().strip()
+    for i in range(0, len(html_td) / 7):
+        abook['xuhao'] = html_td[j].get_text().strip()
+        abook['number'] = html_td[j+1].get_text().strip()
+        abook['name'] = html_td[j + 2].get_text().strip()
+        abook['author'] = html_td[j + 3].get_text().strip()
+        abook['borrowing_date'] = html_td[j + 4].get_text().strip()
+        abook['return_date'] = html_td[j + 5].get_text().strip()
+        abook['position'] = html_td[j + 6].get_text().strip()
+
+        j += 7
+        books.append(abook)
+        abook = {}
+
+    return books
+
+
+
 if __name__ == '__main__':
-    a = library_login('14110543055', '950526')
+    a = library_history('14110543055', '950526')
     # for b in a:
     # print(b)
