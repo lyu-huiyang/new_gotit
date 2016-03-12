@@ -9,6 +9,11 @@ class LibraryForm(Form):
     passwd = PasswordField(u'密码', validators=[DataRequired()])
     submit = SubmitField(u'登陆')
 
+class LibraryHistForm(Form):
+    number = StringField(u'学号', validators=[DataRequired(), Length(1, 12)])
+    passwd = PasswordField(u'密码', validators=[DataRequired()])
+    submit = SubmitField(u'登陆')
+
 
 
 class JwcForm(Form):

@@ -96,12 +96,12 @@ def library():
     if form.is_submitted():
         number = form.number.data
         passwd = form.passwd.data
-        global library_number, library_password
-        library_number = number
-        library_password = passwd
+        # global library_number, library_password
+        # library_number = number
+        # library_password = passwd
         if check_login(number, passwd).url == 'http://222.206.65.12/reader/book_lst.php':
             books = library_login(number, passwd)
-            return render_template('library.html', books=books)
+            return render_template('library.html', books=books, number=number, passwd=passwd)
         else:
             flash(u'帐号或密码错误')
     return render_template('library_login.html', form=form)
@@ -110,10 +110,10 @@ def library():
 # 图书馆借阅历史查询
 @app.route('/library_history', methods=['GET', 'POST'])
 def book_history():
-    if library_number=='':
-        return redirect(url_for('library'))
-    else:
-        books = library_history(library_number, library_password)
+    if request.method == 'POST':
+        number = request.form['number']
+        passwd = request.form['pass']
+        books = library_history(number,passwd)
         return render_template('book_history.html', books=books)
 
 

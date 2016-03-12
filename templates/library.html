@@ -2,7 +2,12 @@
 
 {% block content %}
 <h3>图书馆借阅情况如下：</h3>
-<a href="{{ url_for('book_history') }}">点击查看借阅历史</a>
+<form action="{{ url_for('book_history')}}" method="post">
+    <input  type="hidden" value="{{ number }}" name="number"/>
+    <input type="hidden" value="{{ passwd }}" name="pass">
+    <input class="btn bnt-default" type="submit" value="点击查看借阅历史记录">
+</form>
+
 <table class="table table-bordered">
     <tr>
         <td class="success">条码号</td>
