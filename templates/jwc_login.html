@@ -1,21 +1,21 @@
 ﻿{% extends "layout.html" %}
 
-{% block page_content%}
+{% block page_content %}
 
 
-<form method="post" class="form-signin">
-    <h2 class="form-signin-heading">教务处成绩查询</h2>
-    {{ form.hidden_tag() }}
-    {{ form.number.label }} {{ form.number( class="form-control",placeholder="学号") }}
-    <br/>
-    {{ form.passwd.label }} {{ form.passwd(class="form-control",placeholder="密码") }}
-    <br/>
-    {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
-    <br>
-    <img src="data:image/bmp;base64,{{ ls_f }}">
-    {{ form.submit1(class="btn btn-lg btn-primary btn-block") }}
+    <form method="post" class="form-signin">
+        <h2 class="form-signin-heading">教务处成绩查询</h2>
+        {{ form.hidden_tag() }}
+        {{ form.number.label }} {{ form.number( class="form-control",placeholder="学号") }}
+        <br/>
+        {{ form.passwd.label }} {{ form.passwd(class="form-control",placeholder="密码") }}
+        <br/>
+        {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
+        <br>
+        <img src="data:image/bmp;base64,{{ ls_f }}">
+        {{ form.submit1(class="btn btn-lg btn-primary btn-block") }}
 
-</form>
+    </form>
 
 
 

@@ -1,34 +1,34 @@
 {% extends "layout.html" %}
 
-{% block page_content%}
-<h3>成绩如下：</h3>
+{% block page_content %}
+    <h3>成绩如下：</h3>
 
-<table class="table table-bordered">
-    <tr>
-        <td class="success">考生姓名</td>
-        <td class="success">学校</td>
-        <td class="success">考试类别</td>
-        <td class="success">时间</td>
-        <td class="success">准考证号</td>
-        <td class="success">成绩总分</td>
-        <td class="success">听力</td>
-        <td class="success">阅读</td>
-        <td class="success">写作和翻译</td>
-    </tr>
+    <table class="table table-bordered">
+        <tr>
+            <td class="success">考生姓名</td>
+            <td class="success">学校</td>
+            <td class="success">考试类别</td>
+            <td class="success">时间</td>
+            <td class="success">准考证号</td>
+            <td class="success">成绩总分</td>
+            <td class="success">听力</td>
+            <td class="success">阅读</td>
+            <td class="success">写作和翻译</td>
+        </tr>
 
-    <tr>
-        <td class="info">{{ return_info['data']['number'] }}</td>
-        <td class="info">{{ return_info['data']['school'] }}</td>
-        <td class="info">{{ return_info['data']['number'] }}</td>
-        <td class="info">{{ book['borrowing_date'] }}</td>
-        <td class="info">{{ book['return_date'] }}</td>
-        <td class="info">{{ book['number'] }}</td>
-        <td class="info">{{ book['name'] }}</td>
-        <td class="info">{{ book['author'] }}</td>
-        <td class="info">{{ book['borrowing_date'] }}</td>
-        <td class="info">{{ book['return_date'] }}</td>
-    </tr>
+        <tr>
+            <td class="info">{{ return_info['data']['number'] }}</td>
+            <td class="info">{{ return_info['data']['school'] }}</td>
+            <td class="info">{{ return_info['data']['number'] }}</td>
+            <td class="info">{{ book['borrowing_date'] }}</td>
+            <td class="info">{{ book['return_date'] }}</td>
+            <td class="info">{{ book['number'] }}</td>
+            <td class="info">{{ book['name'] }}</td>
+            <td class="info">{{ book['author'] }}</td>
+            <td class="info">{{ book['borrowing_date'] }}</td>
+            <td class="info">{{ book['return_date'] }}</td>
+        </tr>
 
 
-</table>
+    </table>
 {% endblock %}
