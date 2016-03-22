@@ -36,6 +36,7 @@ def wechat():
             print "There is an error"'''
         if wechat.check_signature(hashcode, timestamp, nonce):
             print 'Accept'
+            return echostr
         else:
             print 'Wrong'
     elif request.method == 'POST':
