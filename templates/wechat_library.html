@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+    <form method="post" class="form-signin">
+        <h2 class="form-signin-heading">OK, 上一步绑定成功，进入图书馆账号密码绑定</h2>
+        <h3>请按照页面操作进行绑定，这是第二步，共两步。</h3>
+        {{ form.hidden_tag() }}
+        <p> 学号您已经输入:{{ xh_post }}</p>
+        <br/>
+        {{ form.passwd.label }} {{ form.password(class="form-control",placeholder="密码") }}
+        <br/>
+        {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+
+    </form>
+
+
+
+
+{% endblock %}
