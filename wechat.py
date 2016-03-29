@@ -13,7 +13,7 @@
 import time  # 用来记录生成微信消息的时间
 import hashlib
 import xml.etree.ElementTree as ET
-from flask import render_template, request, url_for
+from flask import render_template, request, url_for, flash
 from main.forms import *
 from config import app, StuInfo, db
 from spider.library import *
@@ -267,12 +267,21 @@ def wechat_library():
 
 
 @app.route('/wechat/library_info', methods=['GET', 'POST'])
-def wechat_library():
+def wechat_library_info():
     if request.method == 'GET':
         if request.args.get('wechat_id') == None:
             return u'对不起，您无权访问此界面'
         else:
             wechat_id = request.args.get('wechat_id')
-            number = StuInfo.query.filter_by(wechat_id=wechat_id).first()
-            passwd = StuInfo.query.filter_by(wechat_id=wechat_id).first()
+            this_stu_info = StuInfo.query.filter_by(wechat_id=wechat_id).first()
+            number = this_stu_info.stu_id
+            passwd = this_stu_info.library_password
+            if check_login(number, passwd).url == 'http://222.206.65.12/reader/book_lst.php':
+                books = library_login(number, passwd)
+                return render_template('library.html', books=books, number=number, passwd=passwd)
+            else:
+                return u'<h2>服务器出错，请重试。若多次出错请报告站长，由此造成的不便，请谅解</h2>'
+
+@app.route('/wechat/jwc_info', methods=['GET','POST'])
+def wechat_jwc():
     pass

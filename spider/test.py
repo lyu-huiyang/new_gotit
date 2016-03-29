@@ -1,29 +1,30 @@
 # -*- coding: utf-8 -*-
-import xml.etree.ElementTree as ET
+"""
+The flask application package.
+"""
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-test_message = """
-        <xml>
-        <ToUserName><![CDATA[gh_113ae65cd7ed]]></ToUserName>
-        <FromUserName><![CDATA[odabgv1gl5U-ZcEmRIJB3vFrw41M]]></FromUserName>
-        <CreateTime>1458699029</CreateTime>
-        <MsgType><![CDATA[text]]></MsgType>
-        <Content><![CDATA[。]]></Content>
-        <MsgId>6265064624663882806</MsgId>
-        </xml>
-        """
-root = ET.fromstring(test_message)
-to_user_name = root.findall('ToUserName')[0].text
-from_user_name = root.findall('FromUserName')[0].text
-create_time = root.findall('CreateTime')[0].text
-message_type = root.findall('MsgType')[0].text
-content = root.findall('Content')[0].text
-message_id = root.findall('MsgId')[0].text
-return_message = """<xml>
-<ToUserName><![CDATA[%s]]></ToUserName>
-<FromUserName><![CDATA[%s]]></FromUserName>
-<CreateTime>%s</CreateTime>
-<MsgType><![CDATA[%s]]></MsgType>
-<Content><![CDATA[%s]]></Content>
-</xml>""" % (to_user_name, from_user_name,create_time,message_type,content)
+app = Flask(__name__)
+app.config['SECRET_KEY'] = "hard to guess string"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:000000@localhost/gotit'
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-print return_message
+db = SQLAlchemy(app)
+
+
+class StuInfo(db.Model):
+    __tablename__ = 'stu_info'
+    id = db.Column(db.Integer, primary_key=True)
+    stu_id = db.Column(db.String(64), unique=True)
+    wechat_id = db.Column(db.String(64), unique=True)
+    jwc_password = db.Column(db.String(64), unique=True)
+    library_password = db.Column(db.String(64), unique=True)
+
+    def __repr__(self):
+        return '<Role %r>' % self.stu_id
+
+
+# number = StuInfo.query.filter_by(wechat_id='123').first()
+# passwd = StuInfo.query.filter_by(wechat_id='234').first()
