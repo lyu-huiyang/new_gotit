@@ -3,8 +3,8 @@ __pycache__/
 *.py[cod]
 
 # virtualenv
-env
-.env
+venv
+.venv
 
 # idea
 .idea
