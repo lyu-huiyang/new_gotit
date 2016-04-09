@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h3>图书馆借阅情况如下：</h3>
+    <h4>哎呀，您好像一本书也没借</h4>
+    <form action="{{ url_for('book_history') }}" method="post">
+        <input type="hidden" value="{{ number }}" name="number"/>
+        <input type="hidden" value="{{ passwd }}" name="pass">
+        <input class="btn bnt-default" type="submit" value="点击查看借阅历史记录">
+    </form>
+{% endblock %}

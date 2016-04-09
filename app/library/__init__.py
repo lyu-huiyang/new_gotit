@@ -1,1 +1,2 @@
 import library
+import wechat

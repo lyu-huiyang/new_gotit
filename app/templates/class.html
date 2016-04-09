@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h3>您的此学期课表如下：</h3>
+
+    <table class="table table-bordered">
+        <tr>
+
+            <td class="success">星期一</td>
+            <td class="success">星期二</td>
+            <td class="success">星期三</td>
+            <td class="success">星期四</td>
+            <td class="success">星期五</td>
+            <td class="success">星期六</td>
+            <td class="success">星期日</td>
+        </tr>
+        {% for class in return_info[1] %}
+            {% for a_class in class %}
+
+                <tr>
+                    <td class="info">{{ a_class }}</td>
+                </tr>
+            {% endfor %}
+
+        {% endfor %}
+
+    </table>
+{% endblock %}

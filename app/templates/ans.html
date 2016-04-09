@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="不要跟我学扳着手指考试，Just for fun。">
+    <meta name="author" content="Hypo">
+
+    <title>山东理工大学绩点查询估算</title>
+
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='home.css') }}" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">New Gotit</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('home') }}">主页</a></li>
+                    <li><a href="{{ url_for('notice') }}">通告</a></li>
+                    <li><a href="{{ url_for('about') }}">关于</a></li>
+                    <li><a href="{{ url_for('contact') }}">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<h1>&nbsp;</h1>
+
+    <div class="jumbotron">
+        <label>{{ info['info']['no'] }} | {{ info['info']['name'] }} | {{ info['info']['class'] }}</label>
+        <h2>目前绩点：<b>{{ point['point'] }}</b></h2>
+        <p>已修总绩点: {{ point['sumgrade'] }} | 总学分: {{ point['sumpoint'] }}</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="update" method="POST" action="/update">
+                <input type="hidden" name="no" value="{{ info['info']['no'] }}"/>
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>学年</th>
+                        <th>学期</th>
+                        <th>类别</th>
+                        <th>课程名称</th>
+                        <th>学分</th>
+                        <th>原成绩</th>
+                        <th>预计重修成绩</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for grade in info['gradelist'] %}
+                        {% if grade['class'] == "公选课" %}
+                            <tr class="info">
+                                {% elif point[grade['name']] < 60 %}
+                            <tr class="danger">
+                                {% elif point[grade['name']] < 70 %}
+                            <tr class="warning">
+                                {% else %}
+                            <tr>
+                        {% endif %}
+                    <th scope="row">{{ grade['id'] }}</th>
+                    <td>{{ grade['schoolyear'] }}</td>
+                    <td>{{ grade['semester'] }}</td>
+                    <td>{{ grade['class'] }}</td>
+                    <td>{{ grade['name'] }}</td>
+                    <td>{{ grade['point'] }}</td>
+                    <td>{{ grade['grade'] }}</td>
+                    <td><input type="text" class="form-control" name="c{{ grade['id'] }}"
+                               value="{{ point[grade['name']] }}" placeholder="{{ grade['grade'] }}"></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="alert alert-success" role="alert">
+                    <ul>
+                        <li><span class="label label-info">公选课</span>已经用蓝色标注，不计入绩点计算，所以也不用尝试修改成绩</li>
+                        <li><span class="label label-warning">低于70分的课程</span>用黄色标注，如果绩点不够，可以考虑重修</li>
+                        <li><span class="label label-danger">没有通过的课程</span>用红色标注，如果认为自己补考能过，可以手动修改并重新计算</li>
+                        <li>建议从下到上修改成绩进行重新计算，因为如果重修，将按照考试时间最近的成绩为计算依据</li>
+                        <li>本程序忽略了公选课的学分统计和第二专业的绩点计算，这两个功能山理麒麟做的不错 :)</li>
+                        <li>本程序只是经过简单测试，如果遇到问题欢迎反馈：i@ihypo.net</li>
+                        <li>如果程序崩溃，一般重启浏览器就好了 :)</li>
+                    </ul>
+                </div>
+                <button type="submit" class="btn btn-info btn-sm">重新计算</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; OpenSDUT 2016 此模块由<a href="ihypo.net">hypo</a>提供技术支持 </p>
+    </footer>
+
+</div> <!-- /container -->
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?027c62c82667fbc59c9f87a7a28e2da3";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>
