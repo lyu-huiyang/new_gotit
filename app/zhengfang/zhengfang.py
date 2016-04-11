@@ -200,13 +200,13 @@ def zhengfang():
         # 验证码
         file = urllib2.urlopen("http://210.44.176.46/CheckCode.aspx")
         pic = file.read()
-        path = '/home/lvhuiyang/check_code/%s.aspx' % random_str
+        path = 'D:\check_code\%s.aspx' % random_str
         local_pic = open(path, "wb")
         local_pic.write(pic)
         local_pic.close()
         form = JwcForm()
         import base64
-        f = open(r'/home/lvhuiyang/check_code/%s.aspx' % random_str, 'rb')
+        f = open(r'D:\check_code\%s.aspx' % random_str, 'rb')
         ls_f = base64.b64encode(f.read())
         f.close()
         return render_template('jwc_login.html', form=form, ls_f=ls_f)

@@ -30,15 +30,13 @@ def index():
                 j = 0
                 books = []
                 abook = {}
-                print html_td[5].get_text().strip()
+                # print html_td[5].get_text().strip()
                 for i in range(0, len(html_td) / 8):
                     abook['number'] = html_td[j].get_text().strip()
                     abook['name'] = html_td[j + 1].get_text().strip()
                     abook['author'] = html_td[j + 2].get_text().strip()
                     abook['borrowing_date'] = html_td[j + 3].get_text().strip()
                     abook['return_date'] = html_td[j + 4].get_text().strip()
-                    abook['position'] = html_td[j + 5].get_text().strip()  # 存在乱码问题，未解决
-                    abook['other'] = html_td[j + 6].get_text().strip()  # 存在乱码问题，未解决
                     abook['continue'] = u'续借'
                     j += 8
                     books.append(abook)

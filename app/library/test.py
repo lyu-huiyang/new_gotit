@@ -178,8 +178,6 @@ stu_info.append(stu_school)
 stu_info.append(stu_zhuanye)
 stu_info.append(stu_class)
 
-
-
 all_classes = []
 class_12_list = []
 class_34_list = []
@@ -190,26 +188,29 @@ class_10_list = []
 
 classes = soup.find_all("tr")
 
-for i1 in classes[4].find_all("td",width="7%"):
-    print '12',i1.get_text().strip()
+for i1 in classes[4].find_all("td", width="7%"):
+    print '12', i1.get_text().strip()
     class_12_list.append(i1.get_text().strip())
 
-print 'hello',classes[10].find_all("td",width="7%")
-for i2 in classes[6].find_all("td",width="7%"):
+for i2 in classes[6].find_all("td", align="Center"):
     class_34_list.append(i2.get_text().strip())
-    print '34',i2.get_text().strip()
-for i in classes[8].find_all("td",width="7%"):
+    print '34', i2.get_text().strip()
+
+for i in classes[8].find_all("td", align="Center"):
     class_56_list.append(i.get_text().strip())
-    print '56',i.get_text().strip()
-for i in classes[10].find_all("td",width="7%"):
+    print '56', i.get_text().strip()
+
+for i in classes[10].find_all("td", align="Center"):
     class_78_list.append(i.get_text().strip())
-    print '78',i.get_text().strip()
-for i in classes[12].find_all("td",width="7%"):
+    print '78', i.get_text().strip()
+
+for i in classes[12].find_all("td", align="Center"):
     class_9_list.append(i.get_text().strip())
-    print '9',i.get_text().strip()
-for i in classes[13].find_all("td",width="7%"):
+    print '9', i.get_text().strip()
+
+for i in classes[13].find_all("td", align="Center"):
     class_10_list.append(i.get_text().strip())
-    print '10',i.get_text().strip()
+    print '10', i.get_text().strip()
 
 all_classes.append(class_12_list)
 all_classes.append(class_34_list)
@@ -218,10 +219,6 @@ all_classes.append(class_78_list)
 all_classes.append(class_9_list)
 all_classes.append(class_10_list)
 
-
 return_info = []
 return_info.append(stu_info)
 return_info.append(all_classes)
-#print return_info[1]
-#for i in return_info[1][0]:
-#    print i

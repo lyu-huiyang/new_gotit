@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h3>您的此学期课表如下：</h3>
+    <h3>您的个人信息以及此学期课表如下：</h3>
 
     <table class="table table-bordered">
         <tr>
-
+            <td class="success">#</td>
             <td class="success">星期一</td>
             <td class="success">星期二</td>
             <td class="success">星期三</td>
@@ -15,6 +15,7 @@
             <td class="success">星期日</td>
         </tr>
         {% for class in return_info[1] %}
+            <td class="info">第{{ num }}节</td>
             {% for a_class in class %}
 
                 <tr>
