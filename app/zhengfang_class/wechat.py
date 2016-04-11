@@ -38,11 +38,11 @@ def zhengfang_class():
 
         response = s.get("http://210.44.176.46/CheckCode.aspx", stream=True)  # s再次刷新一下验证码url
         random_str = get_random_str()  # 获得一个随机数命名
-        path = 'D:\check_code\%s.aspx' % random_str  # 保存图片的路径
+        path = '/home/lvhuiyang/check_code/%s.aspx' % random_str  # 保存图片的路径
         with open(path, 'wb') as f1:
             shutil.copyfileobj(response.raw, f1)  # 保存
             f1.close()
-        f2 = open(r'D:\check_code\%s.aspx' % random_str, 'rb')
+        f2 = open(r'/home/lvhuiyang/check_code/%s.aspx' % random_str, 'rb')
         ls_f = base64.b64encode(f2.read())  # 用base64模块进行读取
         f2.close()
         return render_template('class_login.html', form=form, ls_f=ls_f)

@@ -66,6 +66,7 @@ def zhengfang_class():
         request1 = urllib2.Request(default_url, postData, headers)
         response1 = urllib2.urlopen(request1)
 
+        #try:
         headers2 = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Encoding': 'gzip, deflate, sdch',
@@ -86,74 +87,69 @@ def zhengfang_class():
             'xm': '',
             'gnmkdm': 'N121603'
         }
+        postData2 = urllib.urlencode(postData2)
         request2 = urllib2.Request(class_, headers=headers2, data=postData2)
         response2 = urllib2.urlopen(request2)
         page_content = response2.read()
         soup = BeautifulSoup(page_content, "html5lib")
-        try:
-            stu_info = []
-            stu_id = soup.find_all("span", id="Label5")[0].get_text().strip()
-            stu_name = soup.find_all("span", id="Label6")[0].get_text().strip()
-            stu_school = soup.find_all("span", id="Label7")[0].get_text().strip()
-            stu_zhuanye = soup.find_all("span", id="Label8")[0].get_text().strip()
-            stu_class = soup.find_all("span", id="Label9")[0].get_text().strip()
+        stu_info = []
+        stu_id = soup.find_all("span")[3].get_text().strip()
+        stu_name = soup.find_all("span")[4].get_text().strip()
+        stu_school = soup.find_all("span")[5].get_text().strip()
+        stu_zhuanye = soup.find_all("span")[6].get_text().strip()
+        stu_class = soup.find_all("span")[7].get_text().strip()
 
-            stu_info.append(stu_id)
-            stu_info.append(stu_name)
-            stu_info.append(stu_school)
-            stu_info.append(stu_zhuanye)
-            stu_info.append(stu_class)
+        stu_info.append(stu_id)
+        stu_info.append(stu_name)
+        stu_info.append(stu_school)
+        stu_info.append(stu_zhuanye)
+        stu_info.append(stu_class)
 
-            all_classes = []
-            class_12_list = []
-            class_34_list = []
-            class_56_list = []
-            class_78_list = []
-            class_9_list = []
-            class_10_list = []
+        all_classes = []
+        class_12_list = []
+        class_34_list = []
+        class_56_list = []
+        class_78_list = []
+        class_9_list = []
 
-            classes = soup.find_all("tr")
 
-            for i1 in classes[4].find_all("td", width="7%"):
-                print '12', i1.get_text().strip()
-                class_12_list.append(i1.get_text().strip())
+        classes = soup.find_all("tr")
 
-            for i2 in classes[6].find_all("td", align="Center"):
-                class_34_list.append(i2.get_text().strip())
-                print '34', i2.get_text().strip()
+        for i1 in classes[4].find_all("td", width="7%"):
+            print '12', i1.get_text().strip()
+            class_12_list.append(i1.get_text().strip())
 
-            for i in classes[8].find_all("td", align="Center"):
-                class_56_list.append(i.get_text().strip())
-                print '56', i.get_text().strip()
+        for i2 in classes[6].find_all("td", align="Center"):
+            class_34_list.append(i2.get_text().strip())
+            print '34', i2.get_text().strip()
 
-            for i in classes[10].find_all("td", align="Center"):
-                class_78_list.append(i.get_text().strip())
-                print '78', i.get_text().strip()
+        for i in classes[8].find_all("td", align="Center"):
+            class_56_list.append(i.get_text().strip())
+            print '56', i.get_text().strip()
 
-            for i in classes[12].find_all("td", align="Center"):
-                class_9_list.append(i.get_text().strip())
-                print '9', i.get_text().strip()
+        for i in classes[10].find_all("td", align="Center"):
+            class_78_list.append(i.get_text().strip())
+            print '78', i.get_text().strip()
 
-            for i in classes[13].find_all("td", align="Center"):
-                class_10_list.append(i.get_text().strip())
-                print '10', i.get_text().strip()
+        for i in classes[12].find_all("td", align="Center"):
+            class_9_list.append(i.get_text().strip())
+            print '9', i.get_text().strip()
 
-            all_classes.append(class_12_list)
-            all_classes.append(class_34_list)
-            all_classes.append(class_56_list)
-            all_classes.append(class_78_list)
-            all_classes.append(class_9_list)
-            all_classes.append(class_10_list)
 
-            return_info = []
-            return_info.append(stu_info)
-            return_info.append(all_classes)
-            num = [12, 34, 56, 78, 9, 10]
+        all_classes.append(class_12_list)
+        all_classes.append(class_34_list)
+        all_classes.append(class_56_list)
+        all_classes.append(class_78_list)
+        all_classes.append(class_9_list)
 
-            return render_template("class.html", return_info=return_info, num=num)
-        except:
-            flash(u"账号或密码错误")
-            return redirect("class")
+        return_info = []
+        return_info.append(stu_info)
+        return_info.append(all_classes)
+
+        return render_template("class.html", return_info=return_info)
+        #except:
+            #flash(u"账号或密码错误")
+            #return redirect("class")
 
 
 
@@ -176,13 +172,13 @@ def zhengfang_class():
         # 验证码
         file = urllib2.urlopen("http://210.44.176.46/CheckCode.aspx")
         pic = file.read()
-        path = 'D:\check_code\%s.aspx' % random_str
+        path = '/home/lvhuiyang/check_code/%s.aspx' % random_str
         local_pic = open(path, "wb")
         local_pic.write(pic)
         local_pic.close()
         form = JwcForm()
         import base64
-        f = open(r'D:\check_code\%s.aspx' % random_str, 'rb')
+        f = open(r'/home/lvhuiyang/check_code/%s.aspx' % random_str, 'rb')
         ls_f = base64.b64encode(f.read())
         f.close()
         return render_template('class_login.html', form=form, ls_f=ls_f)
