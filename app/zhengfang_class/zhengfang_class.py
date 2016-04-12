@@ -65,91 +65,92 @@ def zhengfang_class():
         postData = urllib.urlencode(postData)
         request1 = urllib2.Request(default_url, postData, headers)
         response1 = urllib2.urlopen(request1)
+        soup = BeautifulSoup(response1.read(), "html5lib")
+        print soup
 
-        #try:
-        headers2 = {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Encoding': 'gzip, deflate, sdch',
-            'Accept-Language': 'zh-CN,zh;q=0.8',
-            'Connection': 'keep-alive',
-            'Cookie': get_cookie,
-            'Host': '210.44.176.46',
-            'Referer': real_url,
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
-        }
+        try:
+            headers2 = {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Encoding': 'gzip, deflate, sdch',
+                'Accept-Language': 'zh-CN,zh;q=0.8',
+                'Connection': 'keep-alive',
+                'Cookie': get_cookie,
+                'Host': '210.44.176.46',
+                'Referer': real_url,
+                'Upgrade-Insecure-Requests': '1',
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
+            }
 
-        class_page = "http://210.44.176.46/xscjcx.aspx?xh=%s&xm=%r&gnmkdm=N121603" % (xh_post, password_post)
-        class_ = 'http://210.44.176.46/xskbcx.aspx?xh=14110543055&xm=%C2%C0%BB%E6%D1%EE&gnmkdm=N121603'
-        # print score_page
-        postData2 = {
-            'xh': xh_post,
-            'xm': '',
-            'gnmkdm': 'N121603'
-        }
-        postData2 = urllib.urlencode(postData2)
-        request2 = urllib2.Request(class_, headers=headers2, data=postData2)
-        response2 = urllib2.urlopen(request2)
-        page_content = response2.read()
-        soup = BeautifulSoup(page_content, "html5lib")
-        stu_info = []
-        stu_id = soup.find_all("span")[3].get_text().strip()
-        stu_name = soup.find_all("span")[4].get_text().strip()
-        stu_school = soup.find_all("span")[5].get_text().strip()
-        stu_zhuanye = soup.find_all("span")[6].get_text().strip()
-        stu_class = soup.find_all("span")[7].get_text().strip()
+            # class_page = "http://210.44.176.46/xscjcx.aspx?xh=%s&xm=%r&gnmkdm=N121603" % (xh_post, password_post)
+            class_page = 'http://210.44.176.46/xskbcx.aspx?xh=%s&xm=%s&gnmkdm=N121603' % (xh_post, password_post)
+            # class_ = 'http://210.44.176.46/xskbcx.aspx?xh=14110543055&xm=%C2%C0%BB%E6%D1%EE&gnmkdm=N121603'
+            # print score_page
+            postData2 = {
+                'xh': xh_post,
+                'xm': '',
+                'gnmkdm': 'N121603'
+            }
+            postData2 = urllib.urlencode(postData2)
+            request2 = urllib2.Request(class_page, headers=headers2, data=postData2)
+            response2 = urllib2.urlopen(request2)
+            page_content = response2.read()
+            soup = BeautifulSoup(page_content, "html5lib")
+            stu_info = []
+            stu_id = soup.find_all("span")[3].get_text().strip()
+            stu_name = soup.find_all("span")[4].get_text().strip()
+            stu_school = soup.find_all("span")[5].get_text().strip()
+            stu_zhuanye = soup.find_all("span")[6].get_text().strip()
+            stu_class = soup.find_all("span")[7].get_text().strip()
 
-        stu_info.append(stu_id)
-        stu_info.append(stu_name)
-        stu_info.append(stu_school)
-        stu_info.append(stu_zhuanye)
-        stu_info.append(stu_class)
+            stu_info.append(stu_id)
+            stu_info.append(stu_name)
+            stu_info.append(stu_school)
+            stu_info.append(stu_zhuanye)
+            stu_info.append(stu_class)
 
-        all_classes = []
-        class_12_list = []
-        class_34_list = []
-        class_56_list = []
-        class_78_list = []
-        class_9_list = []
+            all_classes = []
+            class_12_list = []
+            class_34_list = []
+            class_56_list = []
+            class_78_list = []
+            class_9_list = []
 
+            classes = soup.find_all("tr")
 
-        classes = soup.find_all("tr")
+            for i1 in classes[4].find_all("td", width="7%"):
+                print '12', i1.get_text().strip()
+                class_12_list.append(i1.get_text().strip())
 
-        for i1 in classes[4].find_all("td", width="7%"):
-            print '12', i1.get_text().strip()
-            class_12_list.append(i1.get_text().strip())
+            for i2 in classes[6].find_all("td", align="Center"):
+                class_34_list.append(i2.get_text().strip())
+                print '34', i2.get_text().strip()
 
-        for i2 in classes[6].find_all("td", align="Center"):
-            class_34_list.append(i2.get_text().strip())
-            print '34', i2.get_text().strip()
+            for i in classes[8].find_all("td", align="Center"):
+                class_56_list.append(i.get_text().strip())
+                print '56', i.get_text().strip()
 
-        for i in classes[8].find_all("td", align="Center"):
-            class_56_list.append(i.get_text().strip())
-            print '56', i.get_text().strip()
+            for i in classes[10].find_all("td", align="Center"):
+                class_78_list.append(i.get_text().strip())
+                print '78', i.get_text().strip()
 
-        for i in classes[10].find_all("td", align="Center"):
-            class_78_list.append(i.get_text().strip())
-            print '78', i.get_text().strip()
+            for i in classes[12].find_all("td", align="Center"):
+                class_9_list.append(i.get_text().strip())
+                print '9', i.get_text().strip()
 
-        for i in classes[12].find_all("td", align="Center"):
-            class_9_list.append(i.get_text().strip())
-            print '9', i.get_text().strip()
+            all_classes.append(class_12_list)
+            all_classes.append(class_34_list)
+            all_classes.append(class_56_list)
+            all_classes.append(class_78_list)
+            all_classes.append(class_9_list)
 
+            return_info = []
+            return_info.append(stu_info)
+            return_info.append(all_classes)
 
-        all_classes.append(class_12_list)
-        all_classes.append(class_34_list)
-        all_classes.append(class_56_list)
-        all_classes.append(class_78_list)
-        all_classes.append(class_9_list)
-
-        return_info = []
-        return_info.append(stu_info)
-        return_info.append(all_classes)
-
-        return render_template("class.html", return_info=return_info)
-        #except:
-            #flash(u"账号或密码错误")
-            #return redirect("class")
+            return render_template("class.html", return_info=return_info)
+        except:
+            flash(u"账号或密码错误")
+            return redirect("class")
 
 
 

@@ -1,224 +1,287 @@
-# coding=utf-8
-from bs4 import BeautifulSoup
+# -*- coding: utf-8 -*-
+'''
+一键绑定：系统检测到您已经绑定，无需重复绑定，如果需要更换绑定账号，请先解绑后再进行绑定
+绑定界面。
+查课表->已绑定进入数据库查课表，未绑定提示未绑定信息，并提示是否不绑定进行查询
+查教务成绩
+查绩点
+查图书借阅情况
+解除绑定：系统检测到您已经绑定，是否解除绑定？
+系统检测到您并未绑定，所以不需要解绑，前去一键绑定？
+使用说明：
+'''
+import time  # 用来记录生成微信消息的时间
+import hashlib
+import xml.etree.ElementTree as ET
+from flask import render_template, request, url_for, flash
+from main.forms import *
+from config import app, StuInfo, db
+from spider.library import *
+from spider.get_random_str import *
+from spider.cet_no_number import *
+import cookielib
+import urllib2
+import urllib
 
-html_ = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+get_view_state = ''
+get_cookie = ''
+library_number = ''
+library_password = ''
+stu_info = {'stu_id': '', 'wechat_id': '', 'jwc_password': '', 'library_password': ''}
 
-<html lang="gb2312">
-<head>
-<title>现代教学管理信息系统</title><meta content="IE=EmulateIE7" http-equiv="X-UA-Compatible">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<meta content="gb2312" http-equiv="Content-Language">
-<meta content="all" name="robots">
-<meta content="作者信息" name="author">
-<meta content="版权信息" name="Copyright">
-<meta content="站点介绍" name="description">
-<meta content="站点关键词" name="keywords">
-<link href="style/base/favicon.ico" rel="icon" type="image/x-icon">
-<link href="style/base/jw.css" media="all" rel="stylesheet" type="text/css">
-<link href="style/standard/jw.css" media="all" rel="stylesheet" type="text/css">
-<!--<script defer>
-		function  PutSettings()
-			{
-			factory.printing.header="";
-			factory.printing.footer="";
-		    factory.printing.leftMargin="5";
-			factory.printing.topMargin="5";
-			factory.printing.rightMargin="5";
-			factory.printing.bottomMargin="5";
-		 }
 
-					</script>-->
-<style> @media Print { .bgnoprint { }
-	.noprint { DISPLAY: none }}
-	</style>
-</link></link></link></meta></meta></meta></meta></meta></meta></meta></meta></head>
-<body>
-<!--<OBJECT id="factory" style="DISPLAY: none" codeBase="ScriptX.cab#Version=5,60,0,360" classid="clsid:1663ed61-23eb-11d2-b92f-008048fdd814"
-			VIEWASTEXT>
-		</OBJECT>-->
-<form action="xskbcx.aspx?xh=14110543055&amp;xm=%C2%C0%BB%E6%D1%EE&amp;gnmkdm=N121603" id="xskb_form" method="post" name="xskb_form">
-<input name="__EVENTTARGET" type="hidden" value=""/>
-<input name="__EVENTARGUMENT" type="hidden" value=""/>
-<input name="__VIEWSTATE" type="hidden" value="dDwzOTI4ODU2MjU7dDw7bDxpPDE+Oz47bDx0PDtsPGk8MT47aTwyPjtpPDQ+O2k8Nz47aTw5PjtpPDExPjtpPDEzPjtpPDE1PjtpPDI0PjtpPDI2PjtpPDI4PjtpPDMwPjtpPDMyPjtpPDM0Pjs+O2w8dDxwPHA8bDxUZXh0Oz47bDxcZTs+Pjs+Ozs+O3Q8dDxwPHA8bDxEYXRhVGV4dEZpZWxkO0RhdGFWYWx1ZUZpZWxkOz47bDx4bjt4bjs+Pjs+O3Q8aTwyPjtAPDIwMTUtMjAxNjsyMDE0LTIwMTU7PjtAPDIwMTUtMjAxNjsyMDE0LTIwMTU7Pj47bDxpPDA+Oz4+Ozs+O3Q8dDw7O2w8aTwxPjs+Pjs7Pjt0PHA8cDxsPFRleHQ7PjtsPOWtpuWPt++8mjE0MTEwNTQzMDU1Oz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDzlp5PlkI3vvJrlkJXnu5jmnag7Pj47Pjs7Pjt0PHA8cDxsPFRleHQ7PjtsPOWtpumZou+8muiuoeeul+acuuenkeWtpuS4juaKgOacr+WtpumZojs+Pjs+Ozs+O3Q8cDxwPGw8VGV4dDs+O2w85LiT5Lia77ya6K6h566X5py656eR5a2m5LiO5oqA5pyv77yI5Lit54ix5ZCI5L2c5Yqe5a2m77yJOz4+Oz47Oz47dDxwPHA8bDxUZXh0Oz47bDzooYzmlL/nj63vvJrorqHnp5ExNDAyKOS4reWklik7Pj47Pjs7Pjt0PDtsPGk8MT47PjtsPHQ8QDA8Ozs7Ozs7Ozs7Oz47Oz47Pj47dDxwPGw8VmlzaWJsZTs+O2w8bzxmPjs+PjtsPGk8MT47PjtsPHQ8QDA8Ozs7Ozs7Ozs7Oz47Oz47Pj47dDxAMDxwPHA8bDxQYWdlQ291bnQ7XyFJdGVtQ291bnQ7XyFEYXRhU291cmNlSXRlbUNvdW50O0RhdGFLZXlzOz47bDxpPDE+O2k8MD47aTwwPjtsPD47Pj47Pjs7Ozs7Ozs7Ozs+Ozs+O3Q8QDA8cDxwPGw8UGFnZUNvdW50O18hSXRlbUNvdW50O18hRGF0YVNvdXJjZUl0ZW1Db3VudDtEYXRhS2V5czs+O2w8aTwxPjtpPDA+O2k8MD47bDw+Oz4+Oz47Ozs7Ozs7Ozs7Pjs7Pjt0PEAwPHA8cDxsPFBhZ2VDb3VudDtfIUl0ZW1Db3VudDtfIURhdGFTb3VyY2VJdGVtQ291bnQ7RGF0YUtleXM7PjtsPGk8MT47aTwwPjtpPDA+O2w8Pjs+Pjs+Ozs7Ozs7Ozs7Oz47Oz47dDxAMDxwPHA8bDxQYWdlQ291bnQ7XyFJdGVtQ291bnQ7XyFEYXRhU291cmNlSXRlbUNvdW50O0RhdGFLZXlzOz47bDxpPDE+O2k8MD47aTwwPjtsPD47Pj47Pjs7Ozs7Ozs7Ozs+Ozs+Oz4+Oz4+Oz7uJmj9STuRuq3XKP2a1VKuTzgtKw=="/>
-<script language="javascript" type="text/javascript">
-<!--
-	function __doPostBack(eventTarget, eventArgument) {
-		var theform;
-		if (window.navigator.appName.toLowerCase().indexOf("microsoft") > -1) {
-			theform = document.xskb_form;
-		}
-		else {
-			theform = document.forms["xskb_form"];
-		}
-		theform.__EVENTTARGET.value = eventTarget.split("$").join(":");
-		theform.__EVENTARGUMENT.value = eventArgument;
-		theform.submit();
-	}
-// -->
-</script>
-<!-- 多功能操作区 -->
-<!-- 内容显示区开始 -->
-<div class="main_box ">
-<div class="mid_box">
-<div class="title noprint">
-<p>
-<!-- 查询得到的数据量显示区域 --></p>
-</div>
-<!-- From内容 --><span class="formbox">
-<table class="formlist noprint" id="Table2" width="100%">
-<tr>
-<td align="center"><select id="xnd" language="javascript" name="xnd" onchange="__doPostBack('xnd','')">
-<option selected="selected" value="2015-2016">2015-2016</option>
-<option value="2014-2015">2014-2015</option>
-</select><span id="Label2"><font size="4">学年第</font></span><select id="xqd" language="javascript" name="xqd" onchange="__doPostBack('xqd','')">
-<option value="1">1</option>
-<option selected="selected" value="2">2</option>
-<option value="3">3</option>
-</select><span id="Label1"><font size="4">学期学生个人课程表</font></span></td>
-</tr>
-<tr class="trbg1">
-<td><span id="Label5">学号：14110543055</span>|
-									<span id="Label6">姓名：吕绘杨</span>|
-									<span id="Label7">学院：计算机科学与技术学院</span>|
-									<span id="Label8">专业：计算机科学与技术（中爱合作办学）</span>|
-									<span id="Label9">行政班：计科1402(中外)</span>
-									    <span id="labTS"><font color="Red"></font></span><span id="labTip"><font color="Red"></font></span>            <input class="button" id="btnPrint" name="btnPrint" onclick="window.print();" style="DISPLAY:none" type="button" value="打印课表"/>
-</td>
-</tr>
-</table>
-<br>
-<table border="0" bordercolor="Black" class="blacktab" id="Table1" width="100%">
-<tr>
-<td colspan="2" rowspan="1" width="2%">时间</td><td align="Center" width="14%">星期一</td><td align="Center" width="14%">星期二</td><td align="Center" width="14%">星期三</td><td align="Center" width="14%">星期四</td><td align="Center" width="14%">星期五</td><td align="Center" class="noprint" width="14%">星期六</td><td align="Center" class="noprint" width="14%">星期日</td>
-</tr><tr>
-<td colspan="2">早晨</td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td rowspan="4" width="1%">上午</td><td width="1%">第1节</td><td align="Center" rowspan="2" width="7%">软件开发工程<br>周一第1,2节{第1-15周}<br>邵宝民<br>教9211(西)</br></br></br></td><td align="Center" rowspan="2" width="7%">软件测试与检验<br>周二第1,2节{第1-15周}<br>张艳华<br>教9211(西)</br></br></br></td><td align="Center" rowspan="2" width="7%">移动应用程序开发<br>周三第1,2节{第1-15周}<br>李盘靖<br>教9211(西)</br></br></br></td><td align="Center" rowspan="2" width="7%">软件开发工程<br>周四第1,2节{第1-15周}<br>邵宝民<br>教9211(西)</br></br></br></td><td align="Center" rowspan="2" width="7%">数据库系统<br>周五第1,2节{第1-15周}<br>刘树淑<br>教9211(西)</br></br></br></td><td align="Center" class="noprint" width="7%"> </td><td align="Center" class="noprint" width="7%"> </td>
-</tr><tr>
-<td>第2节</td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td>第3节</td><td align="Center" rowspan="2">计算机网络(A)<br>周一第3,4节{第1-15周}<br>吕昌泰<br>教9211(西)</br></br></br></td><td align="Center"> </td><td align="Center" rowspan="2">离散数学(B)<br>周三第3,4节{第1-13周}<br>方春<br>教9211(西)</br></br></br></td><td align="Center" rowspan="2">软件测试与检验<br>周四第3,4节{第1-15周}<br>张艳华<br>教9211(西)</br></br></br></td><td align="Center" rowspan="2">大学英语读写(A)Ⅳ<br>周五第3,4节{第1-15周|单周}<br>亓凤琴<br>教3409(西)</br></br></br></td><td align="Center" class="noprint" rowspan="2">体育(A)Ⅳ<br>周六第3,4节{第1-12周}<br>刘云午<br/></br></br></td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td>第4节</td><td align="Center"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td rowspan="4" width="1%">下午</td><td>第5节</td><td align="Center" rowspan="2">离散数学(B)<br>周一第5,6节{第1-13周}<br>方春<br>教9211(西)</br></br></br></td><td align="Center" rowspan="2">大学英语读写(A)Ⅳ<br>周二第5,6节{第1-16周}<br>亓凤琴<br>教3412(西)</br></br></br></td><td align="Center" rowspan="2">数据库系统<br>周三第5,6节{第1-15周}<br>刘树淑<br>教9211(西)</br></br></br></td><td align="Center"> </td><td align="Center" rowspan="2">移动应用程序开发<br>周五第5,6节{第1-15周}<br>李盘靖<br>教9211(西)</br></br></br></td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td>第6节</td><td align="Center"> </td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td>第7节</td><td align="Center"> </td><td align="Center"> </td><td align="Center" rowspan="2">计算机网络(A)<br>周三第7,8节{第1-15周}<br>吕昌泰<br>教9211(西)</br></br></br></td><td align="Center"> </td><td align="Center"> </td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td>第8节</td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td rowspan="2" width="1%">晚上</td><td>第9节</td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr><tr>
-<td>第10节</td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center"> </td><td align="Center" class="noprint"> </td><td align="Center" class="noprint"> </td>
-</tr>
-</table>
-<br>
-<div align="left" class="noprint">调、停（补）课信息：</div>
-<table border="0" cellpadding="3" cellspacing="0" class="datelist noprint" id="DBGrid" width="100%">
-<tr class="datelisthead">
-<td>编号</td><td>课程名称</td><td>原上课时间地点教师</td><td>现上课时间地点教师</td><td>申请时间</td>
-</tr>
-</table>
-<table class="noprint" id="Table3" width="100%">
-<tr>
-<td align="left">实践课(或无上课时间)信息：</td>
-</tr>
-<tr>
-<td valign="top"><table border="0" cellpadding="3" cellspacing="0" class="datelist" id="DataGrid1" width="100%">
-<tr class="datelisthead">
-<td>课程名称</td><td>教师</td><td>学分</td><td>起止周</td><td>上课时间</td><td>上课地点</td>
-</tr>
-</table></td>
-</tr>
-<tr>
-<td align="left">实习课信息：</td>
-</tr>
-<tr>
-<td><table border="0" cellpadding="3" cellspacing="0" class="datelist" id="DBGridYxkc" width="100%">
-<tr class="datelisthead">
-<td>学年</td><td>学期</td><td>课程名称</td><td>实习时间</td><td>模块代号</td><td>先修模块</td><td>实习编号</td>
-</tr>
-</table></td>
-</tr>
-<tr>
-<td align="left">未安排上课时间的课程：</td>
-</tr>
-<tr>
-<td><table border="0" cellpadding="3" cellspacing="0" class="datelist" id="Datagrid2" width="100%">
-<tr class="datelisthead">
-<td>学年</td><td>学期</td><td>课程名称</td><td>教师姓名</td><td>学分</td>
-</tr>
-</table></td>
-</tr>
-</table>
-</br></br></span>
-<div class="footbox noprint"><em class="footbox_con"><span class="pagination"></span>
-<span class="footbutton"></span>
-<!-- 底部按钮位置 --></em></div>
-</div>
-</div>
-</form>
-</body>
-</html>'''
+def get_cookiejar():
+    # 初始化一个CookieJar来处理Cookie
+    cookiejar = cookielib.MozillaCookieJar()
+    # 下面两行为了调试的
+    httpHandler = urllib2.HTTPHandler(debuglevel=1)
+    httpsHandler = urllib2.HTTPSHandler(debuglevel=1)
+    cookieSupport = urllib2.HTTPCookieProcessor(cookiejar)
+    # 实例化一个全局opener
+    opener = urllib2.build_opener(cookieSupport, httpHandler)
+    urllib2.install_opener(opener)
+    return cookiejar
 
-soup = BeautifulSoup(html_, "html5lib")
 
-stu_info = []
-stu_id = soup.find_all("span", id="Label5")[0].get_text().strip()
-stu_name = soup.find_all("span", id="Label6")[0].get_text().strip()
-stu_school = soup.find_all("span", id="Label7")[0].get_text().strip()
-stu_zhuanye = soup.find_all("span", id="Label8")[0].get_text().strip()
-stu_class = soup.find_all("span", id="Label9")[0].get_text().strip()
+def check_if_binding(wechat_id):
+    if StuInfo.query.filter_by(wechat_id=wechat_id).first() != None:
+        return True
+    else:
+        return False
 
-stu_info.append(stu_id)
-stu_info.append(stu_name)
-stu_info.append(stu_school)
-stu_info.append(stu_zhuanye)
-stu_info.append(stu_class)
 
-all_classes = []
-class_12_list = []
-class_34_list = []
-class_56_list = []
-class_78_list = []
-class_9_list = []
-class_10_list = []
+@app.route('/wechat', methods=['GET', 'POST'])  # 微信主页面
+def wechat():
+    if request.method == 'GET':
+        if request.args.get('timestamp') == None:
+            return u'对不起，您无权访问此界面'
+        timestamp = request.args.get('timestamp')
+        nonce = request.args.get('nonce')
+        echostr = request.args.get('echostr')
+        token = 'lvhuiyang'
+        li = [token, timestamp, nonce]
+        li.sort()
+        sha1 = hashlib.sha1()
+        map(sha1.update, li)
+        hashcode = sha1.hexdigest()
+        if hashcode == request.args.get('signature'):
+            return echostr
+        else:
+            print "There is an error"
+    else:
+        print 'HelloWorld'
+        message = request.data  # 接收用户消息
+        root = ET.fromstring(message)  # 解析xml
+        to_user_name = root.findall('ToUserName')[0].text  # 开发者账号
+        from_user_name = root.findall('FromUserName')[0].text  # 用户微信id
+        create_time = root.findall('CreateTime')[0].text  # 消息创建时间 （整型）
+        message_type = root.findall('MsgType')[0].text  # 消息类型text
+        content = root.findall('Content')[0].text  # 消息内容
+        message_id = root.findall('MsgId')[0].text  # 消息的ID
+        if content == u"一键绑定":
+            if check_if_binding(from_user_name):  # 已经绑定的话返回的是true提示用户不需要再绑定了
+                create_time = int(round(time.time() * 1000))
+                return """<xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA[系统检测到您已经绑定，无需重复绑定，如果需要更换绑定账号，请先解绑后再进行绑定]]></Content>
+                </xml>""" % (from_user_name, to_user_name, create_time)
+            else:  # 用户没有绑定的话进入绑定界面，返回的图文消息
+                create_time = int(round(time.time() * 1000))
+                stu_info['wechat_id'] = from_user_name
+                return """
+                <xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[news]]></MsgType>
+                <ArticleCount>1</ArticleCount>
+                <Articles>
+                <item>
+                <Title><![CDATA[欢迎使用gotit]]></Title>
+                <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
+                <Url><![CDATA[lvhuiyang.cn/wechat/building]]></Url>
+                </item>
+                </xml>
+                """ % (from_user_name, to_user_name, create_time)
+        elif content == u"查课表":
+            pass
+        elif content == u"查教务成绩":
+            pass
+        elif content == u"查绩点":
+            pass
+        elif content == u"图书借阅查询":
+            return """
+                <xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[news]]></MsgType>
+                <ArticleCount>1</ArticleCount>
+                <Articles>
+                <item>
+                <Title><![CDATA[欢迎使用gotit，图书借阅查询]]></Title>
+                <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
+                <Url><![CDATA[lvhuiyang.cn/wechat/library_info?wechat_id=%s]]></Url>
+                </item>
+                </xml>
+                """ % (from_user_name, to_user_name, create_time, from_user_name)
+        elif content == u"解除绑定":
+            if check_if_binding(from_user_name):
 
-classes = soup.find_all("tr")
+                return """<xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA[解绑成功，您可以再次绑定，或者您不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Content>
+                </xml>""" % (from_user_name, to_user_name, create_time)
+            else:
+                return """<xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[text]]></MsgType>
+                <Content><![CDATA[系统检测到您并没有绑定，所以无需进行此操作。]]></Content>
+                </xml>""" % (from_user_name, to_user_name, create_time)
+        else:
+            pass
 
-for i1 in classes[4].find_all("td", width="7%"):
-    print '12', i1.get_text().strip()
-    class_12_list.append(i1.get_text().strip())
 
-for i2 in classes[6].find_all("td", align="Center"):
-    class_34_list.append(i2.get_text().strip())
-    print '34', i2.get_text().strip()
+@app.route('/wechat/building', methods=['GET', 'POST'])  # 微信绑定页面
+def building():
+    if request.method == 'POST':
+        form = JwcForm()
+        xh_post = form.number.data
+        password_post = form.passwd.data
+        check_code_post = form.check_code.data
+        # print get_view_state, get_cookie
+        postData = {
+            '__VIEWSTATE': get_view_state,
+            'txtUserName': xh_post,
+            'TextBox2': password_post,
+            'txtSecretCode': check_code_post,
+            'RadioButtonList1': '%D1%A7%C9%FA',
+            'Button1': '',
+            'lbLanguage': '',
+            'hidPdrs': '',
+            'hidsc': ''
+        }
+        # post请求头部
+        headers = {
 
-for i in classes[8].find_all("td", align="Center"):
-    class_56_list.append(i.get_text().strip())
-    print '56', i.get_text().strip()
+            'Host': '210.44.176.46',
+            'User-Agent': ' Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0 Iceweasel/38.5.0',
+            'Accept': ' text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': ' zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': ' gzip, deflate',
+            'Referer': ' http://210.44.176.46/',
+            'Cookie': get_cookie,
+            'Connection': ' keep-alive'
 
-for i in classes[10].find_all("td", align="Center"):
-    class_78_list.append(i.get_text().strip())
-    print '78', i.get_text().strip()
+        }
+        default_url = 'http://210.44.176.46/default2.aspx'
+        real_url = 'http://210.44.176.46/xs_main.aspx?xh=%s' % xh_post
+        # print xh_post
+        # print '###############\n\n###########\n\n%s' % xh_post
+        postData = urllib.urlencode(postData)
+        request1 = urllib2.Request(default_url, postData, headers)
+        response1 = urllib2.urlopen(request1)
+        try:
 
-for i in classes[12].find_all("td", align="Center"):
-    class_9_list.append(i.get_text().strip())
-    print '9', i.get_text().strip()
+            headers2 = {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Encoding': 'gzip, deflate, sdch',
+                'Accept-Language': 'zh-CN,zh;q=0.8',
+                'Connection': 'keep-alive',
+                'Cookie': get_cookie,
+                'Host': '210.44.176.46',
+                'Referer': real_url,
+                'Upgrade-Insecure-Requests': '1',
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
+            }
 
-for i in classes[13].find_all("td", align="Center"):
-    class_10_list.append(i.get_text().strip())
-    print '10', i.get_text().strip()
+            score_page = "http://210.44.176.46/xscjcx.aspx?xh=%s&xm=%r&gnmkdm=N121605" % (xh_post, password_post)
+            # print score_page
+            request2 = urllib2.Request(score_page, headers=headers2)
+            response2 = urllib2.urlopen(request2)
+            page_content = response2.read()
+            stu_info['stu_id'] = xh_post
+            stu_info['jwc_password'] = password_post
+            return url_for('/wechat/library', xh_post=xh_post)
 
-all_classes.append(class_12_list)
-all_classes.append(class_34_list)
-all_classes.append(class_56_list)
-all_classes.append(class_78_list)
-all_classes.append(class_9_list)
-all_classes.append(class_10_list)
+        except Exception:
+            return render_template("jwc_error.html", message=u"密码或验证码错误，重新绑定")
+    else:
+        login_url = 'http://210.44.176.46/'
+        cookiejar = get_cookiejar()
+        LoginCookie = urllib2.urlopen(login_url)
+        login_html = LoginCookie.read().decode('gbk')
+        soup = BeautifulSoup(login_html, 'html5lib')
+        global get_view_state
+        view_state = soup.find_all("input")
+        get_view_state = view_state[0].get('value')
+        cookies = ''
+        for index, cookie in enumerate(cookiejar):
+            cookies = cookies + cookie.name + "=" + cookie.value + ";"
+        global get_cookie
+        get_cookie = cookies[:-1]
+        random_str = get_random_str()
 
-return_info = []
-return_info.append(stu_info)
-return_info.append(all_classes)
+        # 验证码
+        file = urllib2.urlopen("http://210.44.176.46/CheckCode.aspx")
+        pic = file.read()
+        path = '/home/lvhuiyang/check_code/%s.aspx' % random_str
+        local_pic = open(path, "wb")
+        local_pic.write(pic)
+        local_pic.close()
+        form = JwcForm()
+        import base64
+        f = open(r'/home/lvhuiyang/check_code/%s.aspx' % random_str, 'rb')
+        ls_f = base64.b64encode(f.read())
+        f.close()
+        return render_template('wechat_building.html', form=form, ls_f=ls_f)
+
+
+@app.route('/wechat/library', methods=['GET', 'POST'])
+def wechat_library():
+    form = LibraryBuilding()
+    xh_post = request.args.get('xh_post')
+    if request.method == 'GET':
+        return render_template('wechat_library.html', form=form, xh_post=xh_post)
+    else:
+        password = form.password.data
+        if check_login(xh_post, password).url == 'http://222.206.65.12/reader/book_lst.php':
+            stu_info['library_password'] = password
+            stu_id = StuInfo(stu_id=stu_info['stu_id'])
+            wechat_id = StuInfo(wechat_id=stu_info['wechat_id'])
+            jwc_password = StuInfo(jwc_password=stu_info['jwc_password'])
+            library_password_ = StuInfo(library_password=stu_info['library_password'])
+            db.session.add_all([stu_id, wechat_id, jwc_password, library_password_])
+            db.session.commit()
+            return render_template("building_successful.html", message=u"恭喜您，绑定成功，您可以实现一键查询了，祝您生活愉快")
+        else:
+            return render_template("jwc_error.html", message=u"帐号或密码错误,请重新绑定")
+
+
+@app.route('/wechat/library_info', methods=['GET', 'POST'])
+def wechat_library_info():
+    if request.method == 'GET':
+        if request.args.get('wechat_id') == None:
+            return u'对不起，您无权访问此界面'
+        else:
+            wechat_id = request.args.get('wechat_id')
+            this_stu_info = StuInfo.query.filter_by(wechat_id=wechat_id).first()
+            number = this_stu_info.stu_id
+            passwd = this_stu_info.library_password
+            if check_login(number, passwd).url == 'http://222.206.65.12/reader/book_lst.php':
+                books = library_login(number, passwd)
+                return render_template('library.html', books=books, number=number, passwd=passwd)
+            else:
+                return u'<h2>服务器出错，请重试。若多次出错请报告站长，由此造成的不便，请谅解</h2>'
+
+@app.route('/wechat/jwc_info', methods=['GET','POST'])
+def wechat_jwc():
+    pass#
