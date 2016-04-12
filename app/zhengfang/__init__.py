@@ -1,1 +1,2 @@
 import zhengfang
+import wechat

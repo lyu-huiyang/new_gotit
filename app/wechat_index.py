@@ -4,6 +4,7 @@ from flask import request, render_template, url_for, flash
 import time  # 用来记录生成微信消息的时间
 import hashlib
 import xml.etree.ElementTree as ET
+from db_operating import User
 
 '''
 一键绑定：系统检测到您已经绑定，无需重复绑定，如果需要更换绑定账号，请先解绑后再进行绑定
@@ -46,7 +47,7 @@ def wechat():
         content = root.findall('Content')[0].text  # 消息内容
         message_id = root.findall('MsgId')[0].text  # 消息的ID
         if content == u"一键绑定":
-            if check_if_binding(from_user_name):  # 已经绑定的话返回的是true提示用户不需要再绑定了
+            if User.check_if_binding(from_user_name):  # 已经绑定的话返回的是true提示用户不需要再绑定了
                 create_time = int(round(time.time() * 1000))
                 return """<xml>
                 <ToUserName><![CDATA[%s]]></ToUserName>
@@ -57,7 +58,6 @@ def wechat():
                 </xml>""" % (from_user_name, to_user_name, create_time)
             else:  # 用户没有绑定的话进入绑定界面，返回的图文消息
                 create_time = int(round(time.time() * 1000))
-                stu_info['wechat_id'] = from_user_name
                 return """
                 <xml>
                 <ToUserName><![CDATA[%s]]></ToUserName>
@@ -69,10 +69,10 @@ def wechat():
                 <item>
                 <Title><![CDATA[欢迎使用gotit]]></Title>
                 <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
-                <Url><![CDATA[lvhuiyang.cn/wechat/building]]></Url>
+                <Url><![CDATA[lvhuiyang.cn/wechat/building/zhengfang?token=huiyang2333&wechat_id=%s]]></Url>
                 </item>
                 </xml>
-                """ % (from_user_name, to_user_name, create_time)
+                """ % (from_user_name, to_user_name, create_time, from_user_name)
         elif content == u"查课表":
             pass
         elif content == u"查教务成绩":
@@ -96,8 +96,8 @@ def wechat():
                 </xml>
                 """ % (from_user_name, to_user_name, create_time, from_user_name)
         elif content == u"解除绑定":
-            if check_if_binding(from_user_name):
-
+            if User.check_if_binding(from_user_name):
+                User.cancel_building(from_user_name)
                 return """<xml>
                 <ToUserName><![CDATA[%s]]></ToUserName>
                 <FromUserName><![CDATA[%s]]></FromUserName>
