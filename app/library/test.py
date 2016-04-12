@@ -8,7 +8,7 @@ import json
 
 
 @app.route('/library2', methods=['GET', 'POST'])
-def index():
+def library2():
     form = LibraryForm()
     number = form.number.data
     passwd = form.passwd.data
