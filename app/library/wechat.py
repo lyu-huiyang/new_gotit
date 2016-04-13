@@ -38,7 +38,7 @@ def wechat_library():
         return u'对不起，您的请求非法'
 
 
-@app.route('wechat/library_info', methods=['GET', 'POST'])
+@app.route('/wechat/library_info', methods=['GET', 'POST'])
 def library_info():
     wechat_id = request.args.grt('wechat_id')
     db = get_coll()

@@ -29,7 +29,7 @@ class User(object):
 
     @staticmethod
     def check_if_binding(wechat_id):
-        flag = get_coll().users.find_one({"we_chat": wechat_id})
+        flag = get_coll().users.find_one({"wechat_id": wechat_id})
         if flag is not None:
             return True
         else:

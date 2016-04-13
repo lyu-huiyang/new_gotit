@@ -70,9 +70,9 @@ def zhengfang_building():
         response1 = urllib2.urlopen(request1)
         soup = BeautifulSoup(response1.read(), 'html.parser', from_encoding='utf-8')
         span = soup.find_all("span", id="xhxm")
-        print span[0].get_text().strip()
-        try:
 
+        try:
+            print span[0].get_text().strip()
             info = User(stu_id=xh_post, wechat_id=wechat_id["wechat_id"], zhengfang_password=password_post,
                         library_password="")
             info.save()
