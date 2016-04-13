@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>building</title>
+    <link rel="stylesheet" type="text/css" href="../static/content/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/content/site.css"/>
+    <script src="../static/scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
 <form method="post" class="form-signin">
@@ -17,7 +20,11 @@
     <br>
     <img src="data:image/bmp;base64,{{ ls_f }}">
     {{ form.submit1(class="btn btn-lg btn-primary btn-block") }}
-
 </form>
+
+<script src="../static/scripts/jquery-1.10.2.js"></script>
+<script src="../static/scripts/bootstrap.js"></script>
+<script src="../static/scripts/respond.js"></script>
+
 </body>
 </html>

@@ -98,7 +98,7 @@ def zhengfang_building():
             stu_base_info['stu_major_direction'] = html_span[10].get_text().strip()
             stu_base_info['stu_class'] = html_span[11].get_text().strip()
             print stu_base_info
-            return url_for("wechat_library")
+            return redirect(url_for("wechat_library"))
 
         except Exception:
             flash(u"帐号或密码错误")
