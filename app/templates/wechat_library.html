@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>building</title>
-    <link rel="stylesheet" type="text/css" href="../static/content/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../static/content/site.css"/>
-    <script src="../static/scripts/modernizr-2.6.2.js"></script>
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+
 <form method="post" class="form-signin">
     <h2 class="form-signin-heading">OK, 上一步绑定成功，进入图书馆账号密码绑定</h2>
     <h3>请按照页面操作进行绑定，这是第二步，共两步。</h3>
@@ -21,9 +16,6 @@
 </form>
 
 
-<script src="../static/scripts/jquery-1.10.2.js"></script>
-<script src="../static/scripts/bootstrap.js"></script>
-<script src="../static/scripts/respond.js"></script>
 
-</body>
-</html>
+
+{% endblock %}

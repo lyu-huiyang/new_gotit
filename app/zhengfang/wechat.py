@@ -9,9 +9,11 @@ from get_random_str import get_random_str
 import urllib
 import urllib2
 import cookielib
+from ..db_operating import User
 
 get_view_state = ''
 get_cookie = ''
+wechat_id = {"wechat_id": ""}
 
 
 def get_cookiejar():
@@ -98,16 +100,21 @@ def zhengfang_building():
             stu_base_info['stu_major_direction'] = html_span[10].get_text().strip()
             stu_base_info['stu_class'] = html_span[11].get_text().strip()
             print stu_base_info
-            return redirect(url_for("wechat_library"))
+            info = User(stu_id=xh_post, wechat_id=wechat_id["wechat_id"], zhengfang_password=password_post,
+                        library_password="")
+            info.save()
+            return redirect("wechat_library")
 
         except Exception:
             flash(u"帐号或密码错误")
             return redirect("zhengfang_building")
 
     else:
+        wechat_id["wechat_id"] = request.args.get("token")
         flag = request.args.get("token")
         if flag != 'huiyang2333':
             return u"you are not allowed ti get this page"
+
         login_url = 'http://210.44.176.46/'
         cookiejar = get_cookiejar()
         LoginCookie = urllib2.urlopen(login_url)
