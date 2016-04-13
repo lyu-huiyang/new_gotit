@@ -2,7 +2,7 @@
 
 # 教务处成绩查询
 from app import app
-from flask import request, render_template, redirect, flash
+from flask import request, render_template, redirect, flash, url_for
 from ..form import JwcForm
 from bs4 import BeautifulSoup
 from get_random_str import get_random_str
@@ -98,7 +98,7 @@ def zhengfang_building():
             stu_base_info['stu_major_direction'] = html_span[10].get_text().strip()
             stu_base_info['stu_class'] = html_span[11].get_text().strip()
             print stu_base_info
-            return render_template("wechat_library.html")
+            return url_for("wechat_library")
 
         except Exception:
             flash(u"帐号或密码错误")
@@ -106,7 +106,7 @@ def zhengfang_building():
 
     else:
         flag = request.args.get("token")
-        if flag != 'huiyang233':
+        if flag != 'huiyang2333':
             return u"you are not allowed ti get this page"
         login_url = 'http://210.44.176.46/'
         cookiejar = get_cookiejar()
