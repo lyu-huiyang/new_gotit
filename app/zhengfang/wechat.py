@@ -103,7 +103,7 @@ def zhengfang_building():
             info = User(stu_id=xh_post, wechat_id=wechat_id["wechat_id"], zhengfang_password=password_post,
                         library_password="")
             info.save()
-            return redirect("wechat_library")
+            return redirect(url_for("wechat_library"))
 
         except Exception:
             flash(u"帐号或密码错误")
