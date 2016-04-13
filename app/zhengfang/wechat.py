@@ -68,46 +68,22 @@ def zhengfang_building():
         postData = urllib.urlencode(postData)
         request1 = urllib2.Request(default_url, postData, headers)
         response1 = urllib2.urlopen(request1)
+        soup = BeautifulSoup(response1.read(), 'html.parser', from_encoding='utf-8')
+        span = soup.find_all("span", id="xhxm")
+        print span[0].get_text().strip()
         try:
 
-            headers2 = {
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Encoding': 'gzip, deflate, sdch',
-                'Accept-Language': 'zh-CN,zh;q=0.8',
-                'Connection': 'keep-alive',
-                'Cookie': get_cookie,
-                'Host': '210.44.176.46',
-                'Referer': real_url,
-                'Upgrade-Insecure-Requests': '1',
-                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
-            }
-
-            score_page = "http://210.44.176.46/xscjcx.aspx?xh=%s&xm=%r&gnmkdm=N121605" % (xh_post, password_post)
-            # print score_page
-            request2 = urllib2.Request(score_page, headers=headers2)
-            response2 = urllib2.urlopen(request2)
-            page_content = response2.read()
-            soup = BeautifulSoup(page_content, 'html.parser', from_encoding='utf-8')
-            soup_input = soup.find_all("input")
-            score_view_state = soup_input[2].get('value')
-            html_span = soup.find_all("span")
-
-            stu_base_info = {}
-            stu_base_info['stu_id'] = html_span[5].get_text().strip()
-            stu_base_info['stu_name'] = html_span[6].get_text().strip()
-            stu_base_info['stu_school'] = html_span[7].get_text().strip()
-            stu_base_info['stu_major'] = html_span[8].get_text().strip() + html_span[9].get_text().strip()
-            stu_base_info['stu_major_direction'] = html_span[10].get_text().strip()
-            stu_base_info['stu_class'] = html_span[11].get_text().strip()
-            print stu_base_info
             info = User(stu_id=xh_post, wechat_id=wechat_id["wechat_id"], zhengfang_password=password_post,
                         library_password="")
             info.save()
-            return redirect(url_for("wechat_library"))
-
-        except Exception:
+            return redirect(url_for("wechat_library", xh_post=xh_post))
+        except:
             flash(u"帐号或密码错误")
-            return redirect("zhengfang_building")
+            return redirect(url_for("zhengfang_building"))
+
+            # except Exception:
+            # flash(u"帐号或密码错误")
+            # return redirect(url_for("wechat/building/zhengfang"))
 
     else:
         wechat_id["wechat_id"] = request.args.get("token")

@@ -80,7 +80,25 @@ def wechat():
         elif content == u"查绩点":
             pass
         elif content == u"图书借阅查询":
-            return """
+            if User.check_if_binding(from_user_name):
+
+                return """
+                    <xml>
+                    <ToUserName><![CDATA[%s]]></ToUserName>
+                    <FromUserName><![CDATA[%s]]></FromUserName>
+                    <CreateTime>%s</CreateTime>
+                    <MsgType><![CDATA[news]]></MsgType>
+                    <ArticleCount>1</ArticleCount>
+                    <Articles>
+                    <item>
+                    <Title><![CDATA[欢迎使用gotit，图书借阅查询]]></Title>
+                    <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
+                    <Url><![CDATA[lvhuiyang.cn/wechat/library_info?wechat_id=%s]]></Url>
+                    </item>
+                    </xml>
+                    """ % (from_user_name, to_user_name, create_time, from_user_name)
+            else:
+                return """
                 <xml>
                 <ToUserName><![CDATA[%s]]></ToUserName>
                 <FromUserName><![CDATA[%s]]></FromUserName>
@@ -89,9 +107,9 @@ def wechat():
                 <ArticleCount>1</ArticleCount>
                 <Articles>
                 <item>
-                <Title><![CDATA[欢迎使用gotit，图书借阅查询]]></Title>
-                <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
-                <Url><![CDATA[lvhuiyang.cn/wechat/library_info?wechat_id=%s]]></Url>
+                <Title><![CDATA[欢迎使用gotit]]></Title>
+                <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
+                <Url><![CDATA[lvhuiyang.cn/wechat/building/zhengfang?token=huiyang2333&wechat_id=%s]]></Url>
                 </item>
                 </xml>
                 """ % (from_user_name, to_user_name, create_time, from_user_name)
