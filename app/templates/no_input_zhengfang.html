@@ -2,11 +2,14 @@
 
 {% block page_content %}
 
-    <img src="data:image/bmp;base64,{{ ls_f }}">
+    <h2>教务处成绩查询</h2>
+    <h3>您的账号:{{ number }}</h3>
+    <h3>密码已经帮您记住啦，无需输入</h3>
     <form action="{{ url_for('zhengfang_no_input_query') }}" method="post">
         <input type="hidden" value="{{ number }}" name="number"/>
-        <input type="hidden" value="{{ passwd }}" name="passwd">
+        <input type="hidden" value="{{ passwd }}" name="passwd"/>
         {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
+        <img src="data:image/bmp;base64,{{ ls_f }}">
         <input class="btn bnt-default" type="submit" value="点击查询">
     </form>
 

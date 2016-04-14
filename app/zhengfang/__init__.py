@@ -1,2 +1,3 @@
 import zhengfang
 import wechat
+import no_input_query

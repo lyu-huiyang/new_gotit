@@ -42,9 +42,10 @@ def wechat_library():
 def library_info():
     wechat_id = request.args.get('wechat_id')
     db = get_coll()
-    a = db.users.find({"wechat_id": wechat_id}, {"wechat_id": 1, "_id": 0})
+    info = {}
+    a = db.users.find({"wechat_id": wechat_id})
     for i in a:
-        number = i['stu_id']
-        passwd = i['library_password']
-    if request.method == 'GET':
-        return render_template('no_input_library.html', number=number, passwd=passwd)
+        info['number'] = i['stu_id']
+        info['passwd'] = i['library_password']
+    print '#######', info
+    return render_template('no_input_library.html', number=info['number'], passwd=info['passwd'])

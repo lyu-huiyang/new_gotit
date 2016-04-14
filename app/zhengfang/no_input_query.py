@@ -1,7 +1,7 @@
 # coding=utf-8
 # 教务处成绩查询
 from app import app
-from flask import request, render_template,redirect,flash
+from flask import request, render_template, redirect, flash, url_for
 from ..form import JwcForm
 from bs4 import BeautifulSoup
 from get_random_str import get_random_str
@@ -12,6 +12,8 @@ from ..db_operating import get_coll
 
 get_view_state = ''
 get_cookie = ''
+info = {}
+global_wechat_id = {'wechat_id': ''}
 
 
 def get_cookiejar():
@@ -27,7 +29,7 @@ def get_cookiejar():
     return cookiejar
 
 
-@app.route('/zhengfang_no_input_query', methods=['GET', 'POST'])
+@app.route('/wechat/zhengfang_no_input_query', methods=['GET', 'POST'])
 def zhengfang_no_input_query():
     if request.method == 'POST':
         form = JwcForm()
@@ -178,17 +180,19 @@ def zhengfang_no_input_query():
             return render_template("jwc.html", stu_base_info=stu_base_info, class_info=class_info,
                                    score_content=score_content)
 
-        except Exception:
-            flash(u"帐号或密码错误")
-            return redirect("zhengfang")
+        except:
+            flash(u"账号或密码错误")
+            return redirect(url_for("zhengfang_no_input_query", wechat_id=global_wechat_id['wechat_id']))
 
     else:
         wechat_id = request.args.get('wechat_id')
+        global_wechat_id['wechat_id'] = wechat_id
         db = get_coll()
-        a = db.users.find({"wechat_id": wechat_id}, {"wechat_id": 1, "_id": 0})
+
+        a = db.users.find({"wechat_id": wechat_id})
         for i in a:
-            number = i['stu_id']
-            passwd = i['library_password']
+            info['number'] = i['stu_id']
+            info['passwd'] = i['zhengfang_password']
         login_url = 'http://210.44.176.46/'
         cookiejar = get_cookiejar()
         LoginCookie = urllib2.urlopen(login_url)
@@ -216,4 +220,5 @@ def zhengfang_no_input_query():
         f = open(r'/home/lvhuiyang/check_code/%s.aspx' % random_str, 'rb')
         ls_f = base64.b64encode(f.read())
         f.close()
-        return render_template('jwc_login.html', ls_f=ls_f, number=number,passwd=passwd)
+        return render_template('no_input_zhengfang.html', form=form, ls_f=ls_f, number=info['number'],
+                               passwd=info['passwd'])

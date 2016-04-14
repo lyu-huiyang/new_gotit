@@ -1,1 +1,2 @@
 import zhengfang_class
+import no_input_query

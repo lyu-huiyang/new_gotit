@@ -19,7 +19,7 @@ def find():
 @app.route('/list', methods=['POST'])
 def ans():
     if request.method == 'POST':
-        student = request.form['no']
+        student = request.form['number']
 
         if student.isdigit():
             studentinfo = get_student(student)
@@ -71,8 +71,8 @@ def api():
 def wechat_jwc():
     wechat_id = request.args.get('wechat_id')
     db = get_coll()
-    a = db.users.find({"wechat_id": wechat_id}, {"wechat_id": 1, "_id": 0})
-    student = ''
+    info = {}
+    a = db.users.find({"wechat_id": wechat_id})
     for i in a:
-        student = i['stu_id']
-    return render_template('no_input_jwc.html', no=student)
+        info['number'] = i['stu_id']
+    return render_template('no_input_jwc.html', number=info['number'])

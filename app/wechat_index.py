@@ -89,7 +89,7 @@ def wechat():
                     <item>
                     <Title><![CDATA[欢迎使用gotit，综合成绩以及绩点查询]]></Title>
                     <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
-                    <Url><![CDATA[lvhuiyang.cn/wechat/jwc?wechat_id=%s]]></Url>
+                    <Url><![CDATA[lvhuiyang.cn/wechat/class?wechat_id=%s]]></Url>
                     </item>
                     </xml>
                     """ % (from_user_name, to_user_name, create_time, from_user_name)
@@ -124,7 +124,7 @@ def wechat():
                     <item>
                     <Title><![CDATA[欢迎使用gotit，综合成绩以及绩点查询]]></Title>
                     <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
-                    <Url><![CDATA[lvhuiyang.cn/wechat/jwc?wechat_id=%s]]></Url>
+                    <Url><![CDATA[lvhuiyang.cn/wechat/zhengfang_no_input_query?wechat_id=%s]]></Url>
                     </item>
                     </xml>
                     """ % (from_user_name, to_user_name, create_time, from_user_name)
