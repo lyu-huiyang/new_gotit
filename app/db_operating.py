@@ -51,4 +51,4 @@ class User(object):
 
 
 if __name__ == "__main__":
-    print User.cancel_building("huiyang2333")
+    print User.check_if_binding("huiyang2333")

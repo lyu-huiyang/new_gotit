@@ -47,6 +47,8 @@ def wechat():
         content = root.findall('Content')[0].text  # 消息内容
         message_id = root.findall('MsgId')[0].text  # 消息的ID
         if content == u"一键绑定":
+            print '################', from_user_name
+            print User.check_if_binding(from_user_name)
             if User.check_if_binding(from_user_name):  # 已经绑定的话返回的是true提示用户不需要再绑定了
                 create_time = int(round(time.time() * 1000))
                 return """<xml>
