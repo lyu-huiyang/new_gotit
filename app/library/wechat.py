@@ -40,7 +40,7 @@ def wechat_library():
 
 @app.route('/wechat/library_info', methods=['GET', 'POST'])
 def library_info():
-    wechat_id = request.args.grt('wechat_id')
+    wechat_id = request.args.get('wechat_id')
     db = get_coll()
     a = db.users.find({"wechat_id": wechat_id}, {"wechat_id": 1, "_id": 0})
     for i in a:

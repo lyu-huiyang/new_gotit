@@ -29,8 +29,11 @@ class User(object):
 
     @staticmethod
     def check_if_binding(wechat_id):
-        flag = get_coll().users.find_one({"wechat_id": wechat_id})
-        if flag is not None:
+        flag = get_coll().users.find({"wechat_id": wechat_id})
+        count = ''
+        for count in flag:
+            pass
+        if len(count) != 0:
             return True
         else:
             return False
@@ -46,11 +49,6 @@ class User(object):
             print i
         return users
 
-        # if __name__ == "__main__":
-        # info = User(stu_id=12, wechat_id=123, zhengfang_password=123,
-        # library_password="")
-        # info.save()
-        # db = get_coll()
-        # a = db.users.find({"wechat_id": 123}, {"wechat_id": 1, "_id": 0})
-        # for i in a:
-        # print i['wechat_id']
+
+if __name__ == "__main__":
+    print User.cancel_building("huiyang2333")

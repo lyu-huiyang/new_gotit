@@ -6,6 +6,7 @@ from flask import render_template
 from flask import request, session
 import json
 import copy
+from ..db_operating import User, get_coll
 
 from .computer import get_student, computer
 
@@ -63,4 +64,24 @@ def api():
             if studentinfo is not None:
                 return json.dumps({
                     'point': studentinfo['pointinfo']['point'],
-                    })
+                })
+
+
+@app.route('/wechat/jwc', methods=['GET', 'POST'])
+def wechat_jwc():
+    wechat_id = request.args.get('wechat_id')
+    db = get_coll()
+    a = db.users.find({"wechat_id": wechat_id}, {"wechat_id": 1, "_id": 0})
+    student = ''
+    for i in a:
+        student = i['stu_id']
+    if student.isdigit():
+        studentinfo = get_student(student)
+        if studentinfo is not None:
+            # 加入session
+            session['user'] = studentinfo['gradelist']
+            return render_template(
+                'ans.html',
+                info=studentinfo['gradelist'],
+                point=studentinfo['pointinfo']
+            )
