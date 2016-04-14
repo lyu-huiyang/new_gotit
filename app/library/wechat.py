@@ -38,7 +38,7 @@ def wechat_library():
         return u'对不起，您的请求非法'
 
 
-@app.route('/wechat/library_info', methods=['GET', 'POST'])
+@app.route('/wechat/library_info', methods=['GET'])
 def library_info():
     wechat_id = request.args.get('wechat_id')
     db = get_coll()
@@ -46,40 +46,5 @@ def library_info():
     for i in a:
         number = i['stu_id']
         passwd = i['library_password']
-    login_url = 'http://222.206.65.12/reader/redr_verify.php'
-    book_hist_url = 'http://222.206.65.12/reader/book_hist.php'
-    data = {
-        'number': number,
-        'passwd': passwd,
-        'returnUrl': '',
-        'select': 'cert_no'
-    }
-    url_session = Session()
-
-    temp = url_session.post(login_url, data=data)
-    hist_data = {
-        'para_string': 'all'
-    }
-    book_hist = url_session.post(book_hist_url, data=hist_data)
-    page_content = book_hist.content
-    soup = BeautifulSoup(page_content, 'html5lib')
-    html_td = soup.find_all('td', bgcolor="#FFFFFF")
-    print 'len --> html_td', len(html_td)
-    j = 0
-    books = []
-    abook = {}
-    # print html_td[13].get_text().strip()
-    for i in range(0, len(html_td) / 7):
-        abook['xuhao'] = html_td[j].get_text().strip()
-        abook['number'] = html_td[j + 1].get_text().strip()
-        abook['name'] = html_td[j + 2].get_text().strip()
-        abook['author'] = html_td[j + 3].get_text().strip()
-        abook['borrowing_date'] = html_td[j + 4].get_text().strip()
-        abook['return_date'] = html_td[j + 5].get_text().strip()
-        abook['position'] = html_td[j + 6].get_text().strip()
-
-        j += 7
-        books.append(abook)
-        abook = {}
-
-    return render_template('book_history.html', books=books)
+    if request.method == 'GET':
+        return render_template('no_input_library.html', number=number, passwd=passwd)

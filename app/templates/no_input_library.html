@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+
+    <form action="{{ url_for('index') }}" method="post">
+        <input type="hidden" value="{{ number }}" name="number"/>
+        <input type="hidden" value="{{ passwd }}" name="pass">
+        <input class="btn bnt-default" type="submit" value="点击查看借阅情况">
+    </form>
+
+
+
+
+{% endblock %}

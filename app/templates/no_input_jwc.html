@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+
+    <form action="{{ url_for('ans') }}" method="post">
+        <input type="hidden" value="{{ no }}" name="number"/>
+        <input class="btn bnt-default" type="submit" value="点击查询综合成绩以及绩点">
+    </form>
+
+{% endblock %}

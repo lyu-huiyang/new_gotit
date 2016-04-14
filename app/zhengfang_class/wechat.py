@@ -70,9 +70,9 @@ def zhengfang_class():
         state_dict['get_cookie'] = cookie_from_user
         s = Session()
         s.headers['Cookie'] = cookie_from_user
-        after_login_page = s.post(default_url,data=postData)
-        soup = BeautifulSoup(after_login_page.text,"html5lib")
+        after_login_page = s.post(default_url, data=postData)
+        soup = BeautifulSoup(after_login_page.text, "html5lib")
         print soup
-        return '%s'%soup
+        return '%s' % soup
     else:
         return u'请求非法'

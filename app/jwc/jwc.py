@@ -75,13 +75,4 @@ def wechat_jwc():
     student = ''
     for i in a:
         student = i['stu_id']
-    if student.isdigit():
-        studentinfo = get_student(student)
-        if studentinfo is not None:
-            # 加入session
-            session['user'] = studentinfo['gradelist']
-            return render_template(
-                'ans.html',
-                info=studentinfo['gradelist'],
-                point=studentinfo['pointinfo']
-            )
+    return render_template('no_input_jwc.html', no=student)

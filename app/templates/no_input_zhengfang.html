@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+
+    <img src="data:image/bmp;base64,{{ ls_f }}">
+    <form action="{{ url_for('zhengfang_no_input_query') }}" method="post">
+        <input type="hidden" value="{{ number }}" name="number"/>
+        <input type="hidden" value="{{ passwd }}" name="passwd">
+        {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
+        <input class="btn bnt-default" type="submit" value="点击查询">
+    </form>
+
+
+
+{% endblock %}
