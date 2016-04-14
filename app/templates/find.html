@@ -39,10 +39,10 @@
 <h1>&nbsp;</h1>
     <div class="jumbotron">
         <h2>绩点计算查询</h2>
-        <form action="/list" method="POST">
+        <form action="{{ url_for('ans') }}" method="POST">
             <div class="form-group">
                 <label>请输入学号</label>
-                <input type="text" class="form-control" name="no" placeholder="学号">
+                <input type="text" class="form-control" name="number" placeholder="学号">
             </div>
             <button type="submit" class="btn btn-success">开始计算</button>
             <a class="btn btn-link" target="_blank" href="http://210.44.176.116/cjcx/main.html">计算方法</a>

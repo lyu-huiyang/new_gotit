@@ -58,7 +58,7 @@ def update():
 @app.route('/api', methods=['POST'])
 def api():
     if request.method == 'POST':
-        student = request.form['no']
+        student = request.form['number']
         if student.isdigit():
             studentinfo = get_student(student)
             if studentinfo is not None:
