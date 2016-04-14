@@ -87,7 +87,7 @@ def wechat():
                     <ArticleCount>1</ArticleCount>
                     <Articles>
                     <item>
-                    <Title><![CDATA[欢迎使用gotit，综合成绩以及绩点查询]]></Title>
+                    <Title><![CDATA[欢迎使用gotit，课表查询]]></Title>
                     <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
                     <Url><![CDATA[lvhuiyang.cn/wechat/class?wechat_id=%s]]></Url>
                     </item>
