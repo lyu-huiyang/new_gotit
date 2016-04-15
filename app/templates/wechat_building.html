@@ -1,24 +1,82 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="../../static/content/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../static/content/site.css"/>
+    <script src="../../static/scripts/modernizr-2.6.2.js"></script>
+</head>
 
-{% block page_content %}
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">New Gotit</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('home') }}">主页</a></li>
+                <li><a href="{{ url_for('notice') }}">通告</a></li>
+                <li><a href="{{ url_for('about') }}">关于</a></li>
+                <li><a href="{{ url_for('contact') }}">联系我们</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
+<div class="container body-content">
+    {% block content %}
 
-    <form method="post" class="form-signin">
-        <h2 class="form-signin-heading">教务处账号绑定</h2>
-        <h3>请按照页面操作进行绑定，这是第一步，共两步。</h3>
-        {{ form.hidden_tag() }}
-        {{ form.number.label }} {{ form.number( class="form-control",placeholder="学号") }}
-        <br/>
-        {{ form.passwd.label }} {{ form.passwd(class="form-control",placeholder="密码") }}
-        <br/>
-        {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
-        <br>
-        <img src="data:image/bmp;base64,{{ ls_f }}">
-        {{ form.submit1(class="btn btn-lg btn-primary btn-block") }}
+        {% block page_header %}
 
-    </form>
+        {% endblock %}
 
+        {% block page_flash %}
+            <div class="container">
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-warning">
+                        <button type="button" class="close" data-dismiss="alter">&times;</button>
+                        <h4>{{ message }}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endblock %}
 
+        {% block page_content %}
+            <form method="post" class="form-signin">
+                <h2 class="form-signin-heading">教务处账号绑定</h2>
+                <h3>请按照页面操作进行绑定，这是第一步，共两步。</h3>
+                {{ form.hidden_tag() }}
+                {{ form.number.label }} {{ form.number( class="form-control",placeholder="学号") }}
+                <br/>
+                {{ form.passwd.label }} {{ form.passwd(class="form-control",placeholder="密码") }}
+                <br/>
+                {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
+                <br>
+                <img src="data:image/bmp;base64,{{ ls_f }}">
+                {{ form.submit1(class="btn btn-lg btn-primary btn-block") }}
 
+            </form>
+        {% endblock %}
 
-{% endblock %}
+    {% endblock %}
+    <hr/>
+    <footer>
+        <p>&copy; {{ year }} New Gotit. by<a href="contact">lvhuiyang</a></p>
+    </footer>
+</div>
+
+<script src="../../static/scripts/jquery-1.10.2.js"></script>
+<script src="../../static/scripts/bootstrap.js"></script>
+<script src="../../static/scripts/respond.js"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>
