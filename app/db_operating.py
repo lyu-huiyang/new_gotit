@@ -2,7 +2,7 @@ import pymongo
 
 
 def get_coll():
-    client = pymongo.MongoClient("localhost", 27017)
+    client = pymongo.MongoClient("127.0.0.1", 27017)
     db = client.users
     return db
 
@@ -40,7 +40,7 @@ class User(object):
 
     @staticmethod
     def cancel_building(wechat_id):
-        get_coll().users.remove({"we_chat": wechat_id})
+        get_coll().users.remove({"wechat_id": wechat_id})
 
     @staticmethod
     def query():
