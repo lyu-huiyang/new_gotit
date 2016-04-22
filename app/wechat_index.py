@@ -27,7 +27,7 @@ def wechat():
         timestamp = request.args.get('timestamp')
         nonce = request.args.get('nonce')
         echostr = request.args.get('echostr')
-        token = 'news.sdut.edu.cn'
+        token = 'news_sdut_edu_cn'
         li = [token, timestamp, nonce]
         li.sort()
         sha1 = hashlib.sha1()
