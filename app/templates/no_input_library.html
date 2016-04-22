@@ -2,9 +2,10 @@
 
 {% block page_content %}
 
-    <h2>借阅情况</h2>
-    <h3>您的账号:{{ number }}</h3>
-    <h3>密码已经帮您记住啦，无需输入</h3>
+    <h3>借阅情况</h3>
+    <p>您的账号:{{ number }}</p>
+    <p>密码已经帮您记住啦，无需输入</p>
+    <p>小提示:如果您未登陆过SDUT图书馆系统请先去图书馆系统进行首次登录再实用本系统</p>
     <form action="{{ url_for('index') }}" method="post">
         <input type="hidden" value="{{ number }}" name="number"/>
         <input type="hidden" value="{{ passwd }}" name="passwd">

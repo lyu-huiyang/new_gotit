@@ -3,8 +3,8 @@
 {% block page_content %}
 
     <h3>课表查询</h3>
-    <h3>您的账号:{{ number }}</h3>
-    <h3>密码已经帮您记住啦，无需输入</h3>
+    <p>您的账号:{{ number }}</p>
+    <p>密码已经帮您记住啦，无需输入</p>
     <form action="{{ url_for('wechat_class') }}" method="post">
         <input type="hidden" value="{{ number }}" name="number"/>
         <input type="hidden" value="{{ passwd }}" name="passwd"/>

@@ -27,7 +27,7 @@ def wechat():
         timestamp = request.args.get('timestamp')
         nonce = request.args.get('nonce')
         echostr = request.args.get('echostr')
-        token = 'lvhuiyang'
+        token = 'news.sdut.edu.cn'
         li = [token, timestamp, nonce]
         li.sort()
         sha1 = hashlib.sha1()
@@ -69,7 +69,7 @@ def wechat():
                 <ArticleCount>1</ArticleCount>
                 <Articles>
                 <item>
-                <Title><![CDATA[欢迎使用gotit]]></Title>
+                <Title><![CDATA[欢迎使用理工大学报信息查询系统]]></Title>
                 <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
                 <Url><![CDATA[lvhuiyang.cn/wechat/building/zhengfang?token=huiyang2333&wechat_id=%s]]></Url>
                 </item>
@@ -87,7 +87,7 @@ def wechat():
                     <ArticleCount>1</ArticleCount>
                     <Articles>
                     <item>
-                    <Title><![CDATA[欢迎使用gotit，课表查询]]></Title>
+                    <Title><![CDATA[欢迎使用理工大学报信息查询系统，课表查询]]></Title>
                     <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
                     <Url><![CDATA[lvhuiyang.cn/wechat/class?wechat_id=%s]]></Url>
                     </item>
@@ -103,7 +103,7 @@ def wechat():
                 <ArticleCount>1</ArticleCount>
                 <Articles>
                 <item>
-                <Title><![CDATA[欢迎使用gotit]]></Title>
+                <Title><![CDATA[欢迎使用理工大学报信息查询系统]]></Title>
                 <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
                 <Url><![CDATA[lvhuiyang.cn/wechat/building/zhengfang?token=huiyang2333&wechat_id=%s]]></Url>
                 </item>
@@ -122,7 +122,7 @@ def wechat():
                     <ArticleCount>1</ArticleCount>
                     <Articles>
                     <item>
-                    <Title><![CDATA[欢迎使用gotit，教务处查询]]></Title>
+                    <Title><![CDATA[欢迎使用理工大学报信息查询系统，教务处查询]]></Title>
                     <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
                     <Url><![CDATA[lvhuiyang.cn/wechat/zhengfang_no_input_query?wechat_id=%s]]></Url>
                     </item>
@@ -138,7 +138,7 @@ def wechat():
                 <ArticleCount>1</ArticleCount>
                 <Articles>
                 <item>
-                <Title><![CDATA[欢迎使用gotit]]></Title>
+                <Title><![CDATA[欢迎使用理工大学报信息查询系统]]></Title>
                 <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
                 <Url><![CDATA[lvhuiyang.cn/wechat/building/zhengfang?token=huiyang2333&wechat_id=%s]]></Url>
                 </item>
@@ -157,7 +157,7 @@ def wechat():
                     <ArticleCount>1</ArticleCount>
                     <Articles>
                     <item>
-                    <Title><![CDATA[欢迎使用gotit，综合成绩以及绩点查询]]></Title>
+                    <Title><![CDATA[欢迎使用理工大学报信息查询系统，综合成绩以及绩点查询]]></Title>
                     <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
                     <Url><![CDATA[lvhuiyang.cn/wechat/jwc?wechat_id=%s]]></Url>
                     </item>
@@ -173,7 +173,7 @@ def wechat():
                 <ArticleCount>1</ArticleCount>
                 <Articles>
                 <item>
-                <Title><![CDATA[欢迎使用gotit]]></Title>
+                <Title><![CDATA[欢迎使用理工大学报信息查询系统]]></Title>
                 <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
                 <Url><![CDATA[lvhuiyang.cn/wechat/building/zhengfang?token=huiyang2333&wechat_id=%s]]></Url>
                 </item>
@@ -192,7 +192,7 @@ def wechat():
                     <ArticleCount>1</ArticleCount>
                     <Articles>
                     <item>
-                    <Title><![CDATA[欢迎使用gotit，图书借阅查询]]></Title>
+                    <Title><![CDATA[欢迎使用理工大学报信息查询系统，图书借阅查询]]></Title>
                     <Description><![CDATA[>>> 查看详细信息 <<<]]></Description>
                     <Url><![CDATA[lvhuiyang.cn/wechat/library_info?wechat_id=%s]]></Url>
                     </item>
@@ -208,7 +208,7 @@ def wechat():
                 <ArticleCount>1</ArticleCount>
                 <Articles>
                 <item>
-                <Title><![CDATA[欢迎使用gotit]]></Title>
+                <Title><![CDATA[欢迎使用理工大学报信息查询系统]]></Title>
                 <Description><![CDATA[系统检测到您并未绑定，点击此页面前去绑定。或者您并不想进行绑定，请点击菜单栏的‘无绑定查询’]]></Description>
                 <Url><![CDATA[lvhuiyang.cn/wechat/building/zhengfang?token=huiyang2333&wechat_id=%s]]></Url>
                 </item>
