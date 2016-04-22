@@ -5,7 +5,7 @@
     <form action="{{ url_for('book_history') }}" method="post">
         <input type="hidden" value="{{ number }}" name="number"/>
         <input type="hidden" value="{{ passwd }}" name="pass">
-        <input class="btn bnt-default" type="submit" value="点击查看借阅历史记录">
+        <h3><input class="btn-info" type="submit" value="点击查看历史借阅情况"></h3>
     </form>
 
     <table class="table table-bordered">
