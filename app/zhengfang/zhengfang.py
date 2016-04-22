@@ -77,141 +77,135 @@ def zhengfang():
             'Connection': ' keep-alive'
 
         }
-
         response = requests.post(default_url, data=postData, headers=headers, cookies=cookies)
 
-        headers2 = {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Encoding': 'gzip, deflate, sdch',
-            'Accept-Language': 'zh-CN,zh;q=0.8',
-            'Connection': 'keep-alive',
-            'Cookie': cookies["ASP.NET_SessionId"],
-            'Host': '210.44.176.46',
-            'Referer': real_url,
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
-        }
-
-        score_page = "http://210.44.176.46/xscjcx.aspx?xh=%s&xm=%r&gnmkdm=N121605" % (xh_post, password_post)
-        score_response = requests.get(score_page, headers=headers2, cookies=cookies)
-        soup = BeautifulSoup(score_response.text, "html5lib")
-        # print soup
-        'ok ||||'
-
-        soup_input = soup.find_all("input")
-        score_view_state = soup_input[2].get('value')
-        html_span = soup.find_all("span")
-
-        stu_base_info = {}
-        stu_base_info['stu_id'] = html_span[5].get_text().strip()
-        stu_base_info['stu_name'] = html_span[6].get_text().strip()
-        stu_base_info['stu_school'] = html_span[7].get_text().strip()
-        stu_base_info['stu_major'] = html_span[8].get_text().strip() + html_span[9].get_text().strip()
-        stu_base_info['stu_major_direction'] = html_span[10].get_text().strip()
-        stu_base_info['stu_class'] = html_span[11].get_text().strip()
-
-        html_td = soup.find_all("td")
-        class_info = []
-        not_pass_class = {}
-        not_pass_class_len = (len(html_td) - 27) / 6
-        for i in range(0, not_pass_class_len):
-            not_pass_class['number'] = html_td[i * 6 + 14].get_text().strip()
-            not_pass_class['class_name'] = html_td[i * 6 + 15].get_text().strip()
-            not_pass_class['class_property'] = html_td[i * 6 + 16].get_text().strip()
-            not_pass_class['grade_point'] = html_td[i * 6 + 17].get_text().strip()
-            not_pass_class['max_point'] = html_td[i * 6 + 18].get_text().strip()
-            not_pass_class['class_return'] = html_td[i * 6 + 19].get_text().strip()
-            class_info.append(not_pass_class)
-            not_pass_class = {}
-
-        # 获取该学生的年级 eg.14  15
-        stu_id = stu_base_info['stu_id'][-11:-9]
-
-        def post_for_score(ddlXN, ddlXQ):
+        try:
             headers2 = {
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
                 'Accept-Encoding': 'gzip, deflate, sdch',
                 'Accept-Language': 'zh-CN,zh;q=0.8',
                 'Connection': 'keep-alive',
+                'Cookie': cookies["ASP.NET_SessionId"],
                 'Host': '210.44.176.46',
-                'Referer': score_page,
+                'Referer': real_url,
                 'Upgrade-Insecure-Requests': '1',
                 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
             }
-            # headers2['Referer'] = score_page
-            postData2 = {
-                '__EVENTTARGET': '',
-                '__EVENTARGUMENT': '',
-                '__VIEWSTATE': score_view_state,
-                'hidLanguage': '',
-                'ddlXN': ddlXN,
-                'ddlXQ': ddlXQ,
-                'ddl_kcxz': '',
-                'btn_xq': ''
-            }
-            request3 = requests.post(score_page, data=postData2, headers=headers2, cookies=cookies)
-            soup = BeautifulSoup(request3.text, 'html.parser', from_encoding="utf-8")
 
-            # print 'test1', soup
-            data_list = soup.find_all("td")
-            # print data_list, soup
-            length = (len(data_list) - 36) / 15
-            count = 23
-            temp = {}
-            return_data = []
-            for i in range(0, length):
-                temp['year'] = data_list[count].get_text().strip()  # 学年
-                temp['term'] = data_list[count + 1].get_text().strip()  # 学期
-                temp['class_code'] = data_list[count + 2].get_text().strip()  # 课程代码
-                print u'课程代码', temp['class_code']
-                temp['class_name'] = data_list[count + 3].get_text().strip()  # 课程名称
-                temp['class_quality'] = data_list[count + 4].get_text().strip()  # 课程性质
-                temp['class_return'] = data_list[count + 5].get_text().strip()  # 课程归属
-                temp['score_point'] = data_list[count + 6].get_text().strip()  # 学分
-                temp['gpa'] = data_list[count + 7].get_text().strip()  # 绩点
-                temp['point'] = data_list[count + 8].get_text().strip()  # 成绩
-                temp['flag'] = data_list[count + 9].get_text().strip()  # 标记
-                temp['second_point'] = data_list[count + 10].get_text().strip()  # 补考成绩
-                temp['third_point'] = data_list[count + 11].get_text().strip()  # 重修成绩
-                temp['school'] = data_list[count + 12].get_text().strip()  # 学院
-                temp['comment'] = data_list[count + 13].get_text().strip()  # 备注
-                temp['second_flag'] = data_list[count + 14].get_text().strip()  # 重修标记
-                return_data.append(temp)
+            score_page = "http://210.44.176.46/xscjcx.aspx?xh=%s&xm=%r&gnmkdm=N121605" % (xh_post, password_post)
+            score_response = requests.get(score_page, headers=headers2, cookies=cookies)
+            soup = BeautifulSoup(score_response.text, "html5lib")
+            # print soup
+            'ok ||||'
+
+            soup_input = soup.find_all("input")
+            score_view_state = soup_input[2].get('value')
+            html_span = soup.find_all("span")
+
+            stu_base_info = {}
+            stu_base_info['stu_id'] = html_span[5].get_text().strip()
+            stu_base_info['stu_name'] = html_span[6].get_text().strip()
+            stu_base_info['stu_school'] = html_span[7].get_text().strip()
+            stu_base_info['stu_major'] = html_span[8].get_text().strip() + html_span[9].get_text().strip()
+            stu_base_info['stu_major_direction'] = html_span[10].get_text().strip()
+            stu_base_info['stu_class'] = html_span[11].get_text().strip()
+
+            html_td = soup.find_all("td")
+            class_info = []
+            not_pass_class = {}
+            not_pass_class_len = (len(html_td) - 27) / 6
+            for i in range(0, not_pass_class_len):
+                not_pass_class['number'] = html_td[i * 6 + 14].get_text().strip()
+                not_pass_class['class_name'] = html_td[i * 6 + 15].get_text().strip()
+                not_pass_class['class_property'] = html_td[i * 6 + 16].get_text().strip()
+                not_pass_class['grade_point'] = html_td[i * 6 + 17].get_text().strip()
+                not_pass_class['max_point'] = html_td[i * 6 + 18].get_text().strip()
+                not_pass_class['class_return'] = html_td[i * 6 + 19].get_text().strip()
+                class_info.append(not_pass_class)
+                not_pass_class = {}
+
+            # 获取该学生的年级 eg.14  15
+            stu_id = stu_base_info['stu_id'][-11:-9]
+
+            def post_for_score(ddlXN, ddlXQ):
+                headers2 = {
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'Accept-Encoding': 'gzip, deflate, sdch',
+                    'Accept-Language': 'zh-CN,zh;q=0.8',
+                    'Connection': 'keep-alive',
+                    'Host': '210.44.176.46',
+                    'Referer': score_page,
+                    'Upgrade-Insecure-Requests': '1',
+                    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36'
+                }
+                # headers2['Referer'] = score_page
+                postData2 = {
+                    '__EVENTTARGET': '',
+                    '__EVENTARGUMENT': '',
+                    '__VIEWSTATE': score_view_state,
+                    'hidLanguage': '',
+                    'ddlXN': ddlXN,
+                    'ddlXQ': ddlXQ,
+                    'ddl_kcxz': '',
+                    'btn_xq': ''
+                }
+                request3 = requests.post(score_page, data=postData2, headers=headers2, cookies=cookies)
+                soup = BeautifulSoup(request3.text, 'html.parser', from_encoding="utf-8")
+
+                # print 'test1', soup
+                data_list = soup.find_all("td")
+                # print data_list, soup
+                length = (len(data_list) - 36) / 15
+                count = 23
                 temp = {}
-                count += 15
-            return return_data
+                return_data = []
+                for i in range(0, length):
+                    temp['year'] = data_list[count].get_text().strip()  # 学年
+                    temp['term'] = data_list[count + 1].get_text().strip()  # 学期
+                    temp['class_code'] = data_list[count + 2].get_text().strip()  # 课程代码
+                    temp['class_name'] = data_list[count + 3].get_text().strip()  # 课程名称
+                    temp['class_quality'] = data_list[count + 4].get_text().strip()  # 课程性质
+                    temp['class_return'] = data_list[count + 5].get_text().strip()  # 课程归属
+                    temp['score_point'] = data_list[count + 6].get_text().strip()  # 学分
+                    temp['gpa'] = data_list[count + 7].get_text().strip()  # 绩点
+                    temp['point'] = data_list[count + 8].get_text().strip()  # 成绩
+                    temp['flag'] = data_list[count + 9].get_text().strip()  # 标记
+                    temp['second_point'] = data_list[count + 10].get_text().strip()  # 补考成绩
+                    temp['third_point'] = data_list[count + 11].get_text().strip()  # 重修成绩
+                    temp['school'] = data_list[count + 12].get_text().strip()  # 学院
+                    temp['comment'] = data_list[count + 13].get_text().strip()  # 备注
+                    temp['second_flag'] = data_list[count + 14].get_text().strip()  # 重修标记
+                    return_data.append(temp)
+                    temp = {}
+                    count += 15
+                return return_data
 
-        if stu_id == "13":
-            score_content = [post_for_score("2015-2016", "1"),
-                             post_for_score("2014-2015", "1"), post_for_score("2014-2015", "2"),
-                             post_for_score("2013-2014", "1"), post_for_score("2013-2014", "2")]
+            if stu_id == "13":
+                score_content = [post_for_score("2015-2016", "1"),
+                                 post_for_score("2014-2015", "1"), post_for_score("2014-2015", "2"),
+                                 post_for_score("2013-2014", "1"), post_for_score("2013-2014", "2")]
 
-        elif stu_id == "14":
-            score_content = [post_for_score("2015-2016", "1"),
-                             post_for_score("2014-2015", "1"), post_for_score("2014-2015", "2")]
+            elif stu_id == "14":
+                score_content = [post_for_score("2015-2016", "1"),
+                                 post_for_score("2014-2015", "1"), post_for_score("2014-2015", "2")]
 
-        elif stu_id == "15":
-            score_content = [post_for_score("2015-2016", "1")]
+            elif stu_id == "15":
+                score_content = [post_for_score("2015-2016", "1")]
 
-        else:
-            return render_template("404.html")
+            else:
+                return render_template("404.html")
 
-        print score_content
-        return render_template("jwc.html", stu_base_info=stu_base_info, class_info=class_info,
-                               score_content=score_content)
+            print score_content
+            return render_template("jwc.html", stu_base_info=stu_base_info, class_info=class_info,
+                                   score_content=score_content)
 
-
-
-
-
-
-        # except Exception:
-        # flash(u"帐号或密码错误")
-        # return redirect("zhengfang")
+        except Exception:
+            flash(u"帐号或密码错误")
+            return redirect("zhengfang")
     else:
         return 'Sorry, you are not allowed to ask this page!'
 
-
+# old code
 '''
 # coding=utf-8
 from app import app

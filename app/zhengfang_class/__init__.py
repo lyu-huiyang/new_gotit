@@ -1,2 +1,2 @@
-import zhengfang_class
+import class_with_requests
 import no_input_query
