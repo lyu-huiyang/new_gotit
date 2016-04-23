@@ -28,8 +28,7 @@ New gotit
 apt-get install python-virtualenv             # 安装python虚拟环境
 virtualenv venv                               # 创建名为venv的python虚拟环境
 source venv/bin/activate                      # 使用虚拟环境
-(venv)pip install -r `requirement.txt`        # 在虚拟环境下安装程序所需依赖
-
+(venv)pip install -r `requirements.txt`        # 在虚拟环境下安装程序所需依赖
 ```
 ##启动方式
 ```
