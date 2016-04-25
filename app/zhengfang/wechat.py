@@ -20,8 +20,6 @@ def zhengfang_building():
     if request.method == 'GET':
         wechat_id = request.args.get("wechat_id")
         flag = request.args.get("token")
-        if flag != 'huiyang2333':
-            return u"you are not allowed ti get this page"
         form = JwcForm()
         response_from_main_page = requests.get("http://210.44.176.46/")
         cookies = response_from_main_page.cookies['ASP.NET_SessionId']
