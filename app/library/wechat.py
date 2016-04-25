@@ -7,7 +7,7 @@ from pymongo import MongoClient
 from ..db_operating import User, get_coll
 from bs4 import BeautifulSoup
 
-client = MongoClient("localhost", 27017)
+client = MongoClient("127.0.0.1", 27017)
 db = client.users
 
 
