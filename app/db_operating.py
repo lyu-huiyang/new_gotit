@@ -48,7 +48,3 @@ class User(object):
         for i in users:
             print i
         return users
-
-
-if __name__ == "__main__":
-    print User.check_if_binding("huiyang2333")

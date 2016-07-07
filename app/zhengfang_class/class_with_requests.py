@@ -18,14 +18,25 @@ r = redis.Redis(connection_pool=pool)
 def zhengfang_class():
     if request.method == 'GET':
         form = JwcForm()
-        response_from_main_page = requests.get("http://210.44.176.46/")
+        headers = {
+
+            'Host': '210.44.176.46',
+            'User-Agent': ' Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0 Iceweasel/38.5.0',
+            'Accept': ' text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': ' zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': ' gzip, deflate',
+            'Referer': ' http://210.44.176.46/',
+            'Connection': ' keep-alive'
+
+        }
+        response_from_main_page = requests.get("http://210.44.176.46/", headers=headers)
         cookies = response_from_main_page.cookies['ASP.NET_SessionId']
         soup = BeautifulSoup(response_from_main_page.text, "html5lib")
         view_state = soup.find_all("input")
         view_state = view_state[0].get('value')
         random_str = get_random_str()
         cookies = dict({"ASP.NET_SessionId": cookies})
-        response_from_check_code = requests.get("http://210.44.176.46/CheckCode.aspx",
+        response_from_check_code = requests.get("http://210.44.176.46/CheckCode.aspx", headers=headers,
                                                 cookies=cookies, stream=True)
         path = '/home/lvhuiyang/check_code/%s.aspx' % random_str
 

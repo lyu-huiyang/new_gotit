@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from app import app
-from flask import request, render_template, url_for, flash
+from flask import request
 import time  # 用来记录生成微信消息的时间
 import hashlib
 import xml.etree.ElementTree as ET
