@@ -1,15 +1,20 @@
-# -*- coding: utf-8 -*-
+from config import config
 from flask import Flask
-from werkzeug.contrib.fixers import ProxyFix
+from flask_moment import Moment
+from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hard_to_guess_string'
+moment = Moment()
+db = SQLAlchemy()
 
-import index
-import jwc
-import library
-import zhengfang
-import zhengfang_class
-import wechat_index
 
-app.wsgi_app = ProxyFix(app.wsgi_app)
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+
+    moment.init_app(app)
+    db.init_app(app)
+
+    from .main import main
+    app.register_blueprint(main)
+
+    return app

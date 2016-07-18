@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+</head>
+
+<body>
+<br/>
+<br/>
+<br/>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="/" class="navbar-brand">New Gotit</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.index') }}">主页</a></li>
+                <li><a href="{{ url_for('main.notice') }}">通告</a></li>
+                <li><a href="{{ url_for('main.about') }}">关于</a></li>
+                <li><a href="{{ url_for('main.contact') }}">联系我们</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container body-content">
+    {% block content %}
+
+        {% block page_header %}
+
+        {% endblock %}
+
+        {% block page_flash %}
+            <div class="container">
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-warning">
+                        <button type="button" class="close" data-dismiss="alter">&times;</button>
+                        <h4>{{ message }}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endblock %}
+
+        {% block page_content %}
+        {% endblock %}
+
+    {% endblock %}
+    <hr/>
+    <footer>
+        <p>&copy; {{ year }} New Gotit. by<a href="{{ url_for('main.contact') }}">山东理工大学报</a></p>
+    </footer>
+</div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

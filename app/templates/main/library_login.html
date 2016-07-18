@@ -1,0 +1,20 @@
+﻿{% extends "base.html" %}
+
+{% block page_content %}
+
+
+    <form method="post" class="form-signin">
+        <h2 class="form-signin-heading">图书馆借阅查询</h2>
+        {{ form.hidden_tag() }}
+        {{ form.number.label }} {{ form.number( class="form-control",placeholder="学号") }}
+        <br/>
+        {{ form.passwd.label }} {{ form.passwd(class="form-control",placeholder="密码") }}
+        <br/>
+        {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+
+    </form>
+
+
+
+
+{% endblock %}

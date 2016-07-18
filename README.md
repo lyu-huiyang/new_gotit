@@ -39,7 +39,7 @@ python manage.py
 gunicorn -w 4 -b 0.0.0.0:5000 app:app
 ```
 
-##项目目录结构
+##项目目录结构(已过期,未修改)
 ```
 new_gotit/                           # 项目根目录
 ├── app/                             # 项目的程序单元

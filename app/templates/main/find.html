@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="不要跟我学扳着手指考试，Just for fun。">
+    <meta name="author" content="Hypo">
+
+    <title>山东理工大学绩点查询估算</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">New Gotit</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('main.index') }}">主页</a></li>
+                    <li><a href="{{ url_for('main.notice') }}">通告</a></li>
+                    <li><a href="{{ url_for('main.about') }}">关于</a></li>
+                    <li><a href="{{ url_for('main.contact') }}">联系我们</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <h1>&nbsp;</h1>
+    <div class="jumbotron">
+        <h2>绩点计算查询</h2>
+        <form action="{{ url_for('main.ans') }}" method="POST">
+            <div class="form-group">
+                <label>请输入学号</label>
+                <input type="text" class="form-control" name="number" placeholder="学号">
+            </div>
+            <button type="submit" class="btn btn-success">开始计算</button>
+            <a class="btn btn-link" target="_blank" href="http://210.44.176.116/cjcx/main.html">计算方法</a>
+        </form>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; OpenSDUT 2016 此模块由<a href="http://www.ihypo.net">hypo</a>提供技术支持 </p>
+    </footer>
+
+</div> <!-- /container -->
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?027c62c82667fbc59c9f87a7a28e2da3";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>
