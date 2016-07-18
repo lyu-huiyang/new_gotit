@@ -9,6 +9,8 @@ from ..forms import LibraryForm
 from bs4 import BeautifulSoup
 from ...get_random_str import get_random_str
 from requests import Session
+from app import db
+from app.models import User
 import requests
 import shutil
 import base64
@@ -18,9 +20,23 @@ pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
 r = redis.Redis(connection_pool=pool)
 
 
+def save(stu_number, wechat_id, zhengfang_password, library_password):
+    stu_info = User(
+        stu_number=stu_number,
+        wechat_id=wechat_id,
+        zhengfang_password=zhengfang_password,
+        library_password=library_password
+    )
+    db.session.add(stu_info)
+    db.session.commit()
+
+
 @wechat.route('/building/zhengfang', methods=['GET', 'POST'])
 def zhengfang_building():
     if request.method == 'GET':
+        wechat_id = request.args.get('wechat_id')
+        if wechat_id is None:
+            return u'请求非法'
         form = ZhengfangForm()
         headers1 = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -69,7 +85,7 @@ def zhengfang_building():
         f.close()
         r.set(ls_f, cookies["ASP.NET_SessionId"])
         r.set(cookies["ASP.NET_SessionId"], view_state)
-        return render_template('wechat/zhengfang_building.html', form=form, ls_f=ls_f)
+        return render_template('wechat/zhengfang_building.html', form=form, ls_f=ls_f, wechat_id=wechat_id)
 
 
     elif request.method == 'POST':
@@ -77,6 +93,7 @@ def zhengfang_building():
         xh_post = form.number.data
         password_post = form.passwd.data
         check_code_post = form.check_code.data
+        wechat_id = request.form.get("wechat_id")
         check_base64 = request.form.get("check_base64")
         cookies = r.get(check_base64)
         view_state = r.get(cookies)
@@ -181,7 +198,8 @@ def zhengfang_building():
             return_info.append(stu_info)
             return_info.append(all_classes)
 
-            return redirect(url_for('wechat.library_building', number=xh_post))
+            return redirect(
+                url_for('wechat.library_building', number=xh_post, zhengfang_token=password_post, wechat_id=wechat_id))
             # return render_template('wechat/library_building.html', number=xh_post, form=LibraryForm())
         except:
             return render_template("wechat/error.html", message=u'您输入的密码或验证码有问题，请您关闭页面重新进行绑定')
@@ -193,13 +211,15 @@ def zhengfang_building():
 def library_building():
     form = LibraryForm()
     number = request.args.get('number')
-    passwd = form.passwd.data
+    wechat_id = request.args.get('wechat_id')
+    zhengfang_password = request.args.get('zhengfang_token')
+    library_passwd = form.passwd.data
     if request.method == 'GET':
         return render_template('wechat/library_building.html', form=form, number=number)
     elif request.method == 'POST':
         post_data = {
             "number": number,
-            "passwd": passwd,
+            "passwd": library_passwd,
             "returnUrl": "",
             "select": "cert_no"
         }
@@ -207,6 +227,12 @@ def library_building():
         temp = url_Seeeion.post("http://222.206.65.12/reader/redr_verify.php", post_data)
         book_list_url = url_Seeeion.get("http://222.206.65.12/reader/book_lst.php")
         if book_list_url.url == 'http://222.206.65.12/reader/book_lst.php':  # url相同意味着登陆成功
+            save(
+                stu_number=number,
+                wechat_id=wechat_id,
+                zhengfang_password=zhengfang_password,
+                library_password=library_passwd
+            )
             return render_template("wechat/error.html", message=u'绑定成功，感谢您的使用，现在您可以关闭此页面了')
         else:  # 登录失败返回对应提示的字符串
             return render_template("wechat/error.html", message=u'您输入的密码错误，请您关闭页面重新进行绑定')
