@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+    <form method="post" class="form-signin">
+        <h3 class="form-signin-heading">教务处账号绑定</h3>
+        <p>请按照页面操作进行绑定，这是第一步，共两步。</p>
+        <p>如果绑定过程中出现错误，请重新打开此界面</p>
+        {{ form.hidden_tag() }}
+        {{ form.number.label }} {{ form.number( class="form-control",placeholder="学号") }}
+        <br/>
+        {{ form.passwd.label }} {{ form.passwd(class="form-control",placeholder="密码") }}
+        <br/>
+        {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
+        <br>
+        <input type="hidden" value="{{ ls_f }}" name="check_base64">
+        <img src="data:image/bmp;base64,{{ ls_f }}">
+        {{ form.submit1(class="btn btn-lg btn-primary btn-block") }}
+
+    </form>
+{% endblock %}

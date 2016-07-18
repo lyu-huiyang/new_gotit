@@ -17,4 +17,7 @@ def create_app(config_name):
     from .main import main
     app.register_blueprint(main)
 
+    from .wechat import wechat
+    app.register_blueprint(wechat, url_prefix='/wechat')
+
     return app
