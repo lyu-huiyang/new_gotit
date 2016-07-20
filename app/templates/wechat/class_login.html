@@ -8,10 +8,11 @@
     <form action="{{ url_for('wechat.zhengfang_class') }}" method="post">
         <input type="hidden" value="{{ number }}" name="number"/>
         <input type="hidden" value="{{ passwd }}" name="passwd"/>
+        <input type="hidden" value="{{ wechat_id }}" name="wechat_id"/>
         {{ form.check_code.label }} {{ form.check_code(class="form-control",placeholder="验证码") }}
         <input type="hidden" value="{{ ls_f }}" name="check_base64">
         <img src="data:image/bmp;base64,{{ ls_f }}">
-        <h3><input class="btn-info" type="submit" value="点击查看"></h3>
+        <h3><input class="btn-info" type="submit" value="点击查询"></h3>
     </form>
 
 {% endblock %}

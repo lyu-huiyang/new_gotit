@@ -6,9 +6,10 @@
     <h3>您的账号:{{ number }}</h3>
     <h3>密码已经帮您记住啦，无需输入</h3>
     <p>小提示:如果您未登陆过SDUT图书馆系统请先去图书馆系统进行首次登录再使用本系统</p>
-    <form action="{{ url_for('index') }}" method="post">
+    <form action="{{ url_for('wechat.library') }}" method="post">
         <input type="hidden" value="{{ number }}" name="number"/>
         <input type="hidden" value="{{ passwd }}" name="passwd">
+        <input type="hidden" value="{{ wechat_id }}" name="wechat_id">
         <h3><input class="btn-info" type="submit" value="点击查看借阅情况"></h3>
     </form>
 

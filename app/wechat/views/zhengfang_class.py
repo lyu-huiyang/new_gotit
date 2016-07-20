@@ -6,6 +6,7 @@ from flask import request
 from flask import render_template
 from flask import flash
 from flask import redirect
+from flask import url_for
 from .. import wechat
 from app.models import User
 import requests
@@ -19,9 +20,9 @@ r = redis.Redis(connection_pool=pool)
 
 @wechat.route('/class', methods=['GET', 'POST'])
 def zhengfang_class():
-    wechat_id = request.args.get('wechat_id')
-    account = User.query.filter_by(wechat_id=wechat_id).first()
     if request.method == 'GET':
+        wechat_id = request.args.get('wechat_id')
+        account = User.query.filter_by(wechat_id=wechat_id).first()
         form = ZhengfangForm()
         headers1 = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -73,16 +74,17 @@ def zhengfang_class():
         return render_template(
             'wechat/class_login.html',
             form=form, ls_f=ls_f,
+            wechat_id=account.wechat_id,
             number=account.stu_number,
-            passwd=account.library_password
+            passwd=account.zhengfang_password
         )
 
 
     elif request.method == 'POST':
-        form = ZhengfangForm()
-        xh_post = form.number.data
-        password_post = form.passwd.data
-        check_code_post = form.check_code.data
+        wechat_id = request.form.get('wechat_id')
+        xh_post = request.form.get('number')
+        password_post = request.form.get('passwd')
+        check_code_post = request.form.get('check_code')
         check_base64 = request.form.get("check_base64")
         cookies = r.get(check_base64)
         view_state = r.get(cookies)
@@ -189,7 +191,7 @@ def zhengfang_class():
 
             return render_template("main/class.html", return_info=return_info)
         except:
-            flash(u"账号或密码错误")
-            return redirect("class")
+            flash(u"验证码错误,请重新输入验证码查询")
+            return redirect(url_for('wechat.zhengfang_class', wechat_id=wechat_id))
     else:
         return 'Sorry, you are not allowed to ask this page!'
