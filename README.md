@@ -36,7 +36,7 @@ source venv/bin/activate                      # 使用虚拟环境
 python manage.py
 
 # 正式上线
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
+gunicorn -w 4 -b 0.0.0.0:80 manage:app
 ```
 
 ##项目目录结构(已过期,未修改)
