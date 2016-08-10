@@ -17,7 +17,6 @@ beautifulsoup4==4.4.1
 gunicorn==19.4.5
 html5lib==0.9999999
 itsdangerous==0.24
-pymongo==3.2.2
 python-editor==1.0.1
 redis==2.10.5
 requests==2.9.1
