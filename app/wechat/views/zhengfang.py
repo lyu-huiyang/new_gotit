@@ -220,18 +220,18 @@ def zhengfang():
                 return return_data
 
             if stu_id == "13":
-                score_content = [post_for_score("2015-2016", "1"),
-                                 post_for_score("2014-2015", "1"), post_for_score("2014-2015", "2"),
-                                 post_for_score("2013-2014", "1"), post_for_score("2013-2014", "2"),
-                                 post_for_score("2015-2016", "2")]
+                score_content = [post_for_score("2015-2016", "2"),
+                                 post_for_score("2015-2016", "1"), post_for_score("2014-2015", "2"),
+                                 post_for_score("2014-2015", "1"), post_for_score("2013-2014", "2"),
+                                 post_for_score("2013-2014", "1")]
 
             elif stu_id == "14":
-                score_content = [post_for_score("2015-2016", "1"),
-                                 post_for_score("2014-2015", "1"), post_for_score("2014-2015", "2"),
-                                 post_for_score("2015-2016", "2")]
+                score_content = [post_for_score("2015-2016", "2"),
+                                 post_for_score("2015-2016", "1"), post_for_score("2014-2015", "2"),
+                                 post_for_score("2014-2015", "1")]
 
             elif stu_id == "15":
-                score_content = [post_for_score("2015-2016", "1"), post_for_score("2015-2016", "2")]
+                score_content = [post_for_score("2015-2016", "2"), post_for_score("2015-2016", "1")]
 
             else:
                 return render_template("404.html")
