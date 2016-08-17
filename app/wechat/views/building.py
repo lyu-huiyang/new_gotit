@@ -15,8 +15,14 @@ import requests
 import shutil
 import base64
 import redis
+import os
 
-pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
+pool = redis.ConnectionPool(
+    host=os.getenv("redis_host"),
+    port=os.getenv("redis_port"),
+    db=os.getenv("redis_db"),
+    password=os.getenv("redis_password")
+)
 r = redis.Redis(connection_pool=pool)
 
 
