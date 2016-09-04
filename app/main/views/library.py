@@ -77,7 +77,6 @@ def book_history():
         page_content = book_hist.content
         soup = BeautifulSoup(page_content, 'html5lib')
         html_td = soup.find_all('td', bgcolor="#FFFFFF")
-        print 'len --> html_td', len(html_td)
         j = 0
         books = []
         abook = {}
