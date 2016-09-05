@@ -33,7 +33,6 @@ def library():
                 j = 0
                 books = []
                 abook = {}
-                # print html_td[5].get_text().strip()
                 for i in range(0, len(html_td) / 8):
                     abook['number'] = html_td[j].get_text().strip()
                     abook['name'] = html_td[j + 1].get_text().strip()

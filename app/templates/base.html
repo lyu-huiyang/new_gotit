@@ -21,11 +21,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">New Gotit</a>
+            <a href="/" class="navbar-brand">New gotit</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('main.index') }}">主页</a></li>
+                <li><a href="{{ url_for('main.part_time_job') }}">兼职平台</a></li>
                 <li><a href="{{ url_for('main.notice') }}">通告</a></li>
                 <li><a href="{{ url_for('main.about') }}">关于</a></li>
                 <li><a href="{{ url_for('main.contact') }}">联系我们</a></li>
@@ -58,7 +59,9 @@
     {% endblock %}
     <hr/>
     <footer>
-        <p>&copy; {{ year }} New Gotit. by<a href="{{ url_for('main.contact') }}">山东理工大学报</a></p>
+        <p>&copy; {{ year }} New gotit. by <a href="http://blog.lvhuiyang.cn">lvhuiyang</a> with
+            <a href="{{ url_for('main.contact') }}">山东理工大学报</a>
+        </p>
     </footer>
 </div>
 

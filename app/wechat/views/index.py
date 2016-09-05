@@ -48,7 +48,7 @@ def wechat():
         if hashcode == request.args.get('signature'):
             return echostr
         else:
-            print "There is an error"
+            print("There is an error")
     elif request.method == 'POST':
         message = request.data  # 接收用户消息
         root = ET.fromstring(message)  # 解析xml

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+    <h2>兼职平台信息管理</h2>
+    <br/>
+    <form action="{{ url_for('main.part_time_job_manage') }}" method="post" role="form" id="form">
+        <div class="form-group">
+            <label for="job_time">发布时间：(不可更改)</label>
+            <input type="text" class="form-control" id="job_time"
+                   name="job_time" value="{{ job_time }}" disabled>
+        </div>
+        <div class="form-group">
+            <label for="job_title">标题</label>
+            <input type="text" class="form-control" id="job_title"
+                   name="job_title" placeholder="请输入兼职信息标题">
+        </div>
+        <div class="form-group">
+            <label for="job_content">内容</label>
+            <br/>
+            <textarea cols="50" rows="10" id="job_content" name="job_content"
+                      class="form-control" placeholder="请输入兼职信息内容"></textarea>
+
+        </div>
+        <div class="form-group">
+            <label for="job_content">商家联系方式 ( 如果需要 )</label>
+            <br/>
+            <textarea cols="50" rows="2" id="job_content" name="job_contact"
+                      class="form-control" placeholder="请输入商家联系方式"></textarea>
+
+        </div>
+        <input type="button" class="btn btn-primary" onclick="check_space()" value="提交">
+        <button type="reset" class="btn btn-primary">重置</button>
+    </form>
+    {% block scripts %}
+        <script>
+            function check_space() {
+                if (document.getElementById("job_title").value == "")
+                    alert("信息标题不能为空");
+                else {
+                    if (document.getElementById("job_content").value == "")
+                        alert("信息内容不能为空");
+                    else
+                        document.getElementById("form").submit();
+                }
+            }
+        </script>
+    {% endblock %}
+
+{% endblock %}
