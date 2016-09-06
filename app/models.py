@@ -52,11 +52,11 @@ class Role(db.Model):
 
 class Power(db.Model):
     """
-    权力表，存放id， 反向引用以及默认关闭的读、写、管理权限
+    权限表，存放id， 反向引用以及默认关闭的读、写、管理权限
     """
     __tablename__ = 'powers'
     id = db.Column(db.Integer, primary_key=True)
-    roles = db.relationship('Account', backref='power')
+    roles = db.relationship('Role', backref='power')
     read_important_mess = db.Column(db.Boolean, default=False)
     update = db.Column(db.Boolean, default=False)
     admin = db.Column(db.Boolean, default=False)
