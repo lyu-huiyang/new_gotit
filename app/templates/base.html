@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 
 <body>
@@ -59,8 +60,11 @@
     {% endblock %}
     <hr/>
     <footer>
-        <p>&copy; {{ year }} New gotit. by <a href="http://blog.lvhuiyang.cn">lvhuiyang</a> with
-            <a href="{{ url_for('main.contact') }}">山东理工大学报</a>
+        <p>Copyright &copy; {{ year }} New gotit, by
+            <a href="http://blog.lvhuiyang.cn" target="_blank">lvhuiyang</a>
+            and
+            <a href="http://news.sdut.edu.cn" target="_blank">山东理工大学报</a>.
+            All rights reserved.
         </p>
     </footer>
 </div>

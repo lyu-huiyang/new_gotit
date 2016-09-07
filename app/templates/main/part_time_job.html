@@ -6,10 +6,17 @@
     {% for message in all_message[::-1] %}
         <div class="part_time_content">
             <h3>{{ message.id }}. 标题：{{ message.title }}</h3>
-            <h4>创建时间时间：{{ message.date }}</h4>
-            <h4>内容：{{ message.content }}</h4>
+            <h4>创建时间：{{ message.date }}</h4>
+            <pre >内容：<br/>{{ message.content }}</pre>
+
         </div>
+
     {% endfor %}
 
 
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    </script>
 {% endblock %}

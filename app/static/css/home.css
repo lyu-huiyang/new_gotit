@@ -17,6 +17,7 @@ body {
     padding-bottom: 20px;
     border-bottom: 1px solid #e5e5e5;
 }
+
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
     margin-top: 0;
@@ -40,21 +41,22 @@ body {
     text-align: center;
     border-bottom: 1px solid #e5e5e5;
 }
+
 .jumbotron #btn {
     padding: 14px 24px;
     font-size: 21px;
 }
 
-.table input{
+.table input {
     height: 22px;
     width: 75px;
 }
 
-#update{
+#update {
     margin-bottom: 20px;
 }
 
-.jumbotron form{
+.jumbotron form {
     text-align: left;
 }
 
@@ -62,6 +64,7 @@ body {
 .marketing {
     margin: 40px 0;
 }
+
 .marketing p + h4 {
     margin-top: 28px;
 }
@@ -75,12 +78,18 @@ body {
         padding-right: 0;
         padding-left: 0;
     }
+
     /* Space out the masthead */
     .header {
         margin-bottom: 30px;
     }
+
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {
         border-bottom: 0;
     }
+}
+
+pre {
+    font-size: 16px;
 }
